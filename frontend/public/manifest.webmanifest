@@ -1,0 +1,16 @@
+{
+  "name": "Scholarify TryOut & Learning",
+  "short_name": "Scholarify",
+  "description": "Platform Simulasi TryOut UTBK/SNBT Scholarify",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#18181b",
+  "icons": [
+    {
+      "src": "/images/scholarify-logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}

@@ -1,0 +1,142 @@
+"use client";
+
+import { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { apiRequest, setStoredToken } from "@/src/api/client";
+import type { LoginResponseDto } from "@/src/api/contracts";
+import { toErrorMessage } from "@/src/api/errors";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Field,
+  FieldDescription,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+
+export function LoginForm({
+  className,
+  ...props
+}: React.ComponentProps<"div">) {
+  const sp = useSearchParams();
+  const from = sp.get("from") || "/tryout";
+
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErr(null);
+    setLoading(true);
+    try {
+      const data = await apiRequest<LoginResponseDto>("/auth/login", {
+        method: "POST",
+        body: JSON.stringify({ username, password }),
+      });
+
+      setStoredToken(data.token);
+
+      if (data.user.role === "ADMIN") {
+        window.location.href = "/admin";
+      } else {
+        window.location.href = from;
+      }
+    } catch (error) {
+      setErr(toErrorMessage(error, "Username atau password salah"));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className={cn("flex flex-col gap-6", className)} {...props}>
+      <Card>
+        <CardHeader className="text-center">
+          <CardTitle className="text-xl">Selamat Datang Kembali</CardTitle>
+          <CardDescription>
+            Masuk dengan akun siswa atau admin Scholarify
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={onSubmit}>
+            <FieldGroup>
+              <Field>
+                <FieldLabel htmlFor="username">Username</FieldLabel>
+                <Input
+                  id="username"
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="username"
+                  autoComplete="username"
+                  className="min-h-[44px]"
+                  required
+                />
+              </Field>
+              <Field>
+                <FieldLabel htmlFor="password">Password</FieldLabel>
+                <div className="relative">
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    autoComplete="current-password"
+                    className="min-h-[44px] pr-10"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((v) => !v)}
+                    className="absolute inset-y-0 right-0 flex w-10 items-center justify-center text-muted-foreground hover:text-foreground"
+                    aria-label={showPassword ? "Sembunyikan sandi" : "Tampilkan sandi"}
+                  >
+                    {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                  </button>
+                </div>
+              </Field>
+
+              {err && (
+                <div className="rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-xs text-destructive">
+                  {err}
+                </div>
+              )}
+
+              <Field>
+                <Button type="submit" disabled={loading} className="w-full min-h-[44px]">
+                  {loading ? (
+                    <>
+                      <Loader2 className="mr-2 size-4 animate-spin" />
+                      Memproses...
+                    </>
+                  ) : (
+                    "Masuk"
+                  )}
+                </Button>
+                <FieldDescription className="text-center">
+                  Belum punya akun? Hubungi admin Scholarify untuk aktivasi.
+                </FieldDescription>
+              </Field>
+            </FieldGroup>
+          </form>
+        </CardContent>
+      </Card>
+      <FieldDescription className="px-6 text-center">
+        Platform Simulasi TryOut UTBK &amp; Belajar Terpadu Scholarify.
+      </FieldDescription>
+    </div>
+  );
+}

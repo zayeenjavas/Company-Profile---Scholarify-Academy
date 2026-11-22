@@ -1,0 +1,184 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  STUDENT
+}
+
+enum SubscriptionPlan {
+  FREE
+  PREMIUM
+}
+
+enum SubscriptionStatus {
+  NONE
+  ACTIVE
+  EXPIRED
+}
+
+enum PackageStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum QuestionType {
+  PG
+  PG_KOMPLEKS
+  ISIAN
+}
+
+enum ExamSessionStatus {
+  TERDAFTAR
+  BERLANGSUNG
+  SELESAI
+  WAKTU_HABIS
+  DIBATALKAN
+  DINILAI
+}
+
+model User {
+  id           String        @id @default(cuid())
+  username     String        @unique
+  name         String
+  email        String?       @unique
+  passwordHash String
+  role         UserRole      @default(STUDENT)
+  isActive     Boolean       @default(true)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  subscription Subscription?
+  sessions     ExamSession[]
+}
+
+model Subscription {
+  id        String             @id @default(cuid())
+  userId    String             @unique
+  plan      SubscriptionPlan   @default(FREE)
+  status    SubscriptionStatus @default(NONE)
+  expiresAt DateTime?
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Subtest {
+  id              String        @id @default(cuid())
+  code            String        @unique
+  title           String
+  description     String        @default("")
+  durationMinutes Float
+  questionCount   Int
+
+  questions Question[]
+  sessions  ExamSession[]
+}
+
+model TryoutPackage {
+  id               String           @id @default(cuid())
+  slug             String           @unique
+  title            String
+  description      String           @default("")
+  tier             SubscriptionPlan @default(PREMIUM)
+  status           PackageStatus    @default(DRAFT)
+  durationMinutes  Int              @default(90)
+  openAt           DateTime
+  closeAt          DateTime
+  shuffleQuestions Boolean          @default(false)
+  shuffleChoices   Boolean          @default(false)
+  allowReview      Boolean          @default(true)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  questions Question[]
+  sessions  ExamSession[]
+}
+
+model Question {
+  id           String       @id @default(cuid())
+  packageId    String
+  subtestId    String
+  orderNo      Int          @default(1)
+  stemContent  String
+  imageUrl     String?
+  questionType QuestionType @default(PG)
+  weight       Int          @default(1)
+  explanation  String?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  tryoutPackage TryoutPackage    @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  subtest       Subtest          @relation(fields: [subtestId], references: [id], onDelete: Cascade)
+  choices       QuestionChoice[]
+  answers       StudentAnswer[]
+
+  @@index([packageId, subtestId])
+}
+
+model QuestionChoice {
+  id         String  @id @default(cuid())
+  questionId String
+  label      String
+  content    String
+  isCorrect  Boolean @default(false)
+
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([questionId, label])
+}
+
+model ExamSession {
+  id          String            @id @default(cuid())
+  userId      String
+  packageId   String
+  subtestId   String
+  status      ExamSessionStatus @default(TERDAFTAR)
+  startedAt   DateTime?
+  expiresAt   DateTime?
+  submittedAt DateTime?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tryoutPackage TryoutPackage   @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  subtest       Subtest         @relation(fields: [subtestId], references: [id], onDelete: Cascade)
+  answers       StudentAnswer[]
+  result        ExamResult?
+
+  @@unique([userId, packageId, subtestId])
+}
+
+model StudentAnswer {
+  id            String   @id @default(cuid())
+  sessionId     String
+  questionId    String
+  selectedLabel String?
+  isFlagged     Boolean  @default(false)
+  updatedAt     DateTime @updatedAt
+
+  session  ExamSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  question Question    @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, questionId])
+}
+
+model ExamResult {
+  id           String   @id @default(cuid())
+  sessionId    String   @unique
+  totalScore   Float    @default(0)
+  correctCount Int      @default(0)
+  wrongCount   Int      @default(0)
+  emptyCount   Int      @default(0)
+  gradedAt     DateTime @default(now())
+
+  session ExamSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+}

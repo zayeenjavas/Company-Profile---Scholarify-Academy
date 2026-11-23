@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   ArrowRight,
   BookOpen,
@@ -24,17 +25,18 @@ import {
 } from "@/components/ui/sheet";
 
 const navLinks = [
-  { href: "#beranda", label: "Beranda" },
-  { href: "#program", label: "Program" },
-  { href: "#tentang", label: "Tentang" },
-  { href: "#paket", label: "TryOut" },
-  { href: "#tim", label: "Tim" },
-  { href: "#testimoni", label: "Testimoni" },
-  { href: "#berita", label: "Berita" },
-  { href: "#kontak", label: "Kontak" },
+  { href: "/", label: "Beranda" },
+  { href: "/program", label: "Program" },
+  { href: "/tentang", label: "Tentang" },
+  { href: "/tryout", label: "TryOut" },
+  { href: "/tim", label: "Tim" },
+  { href: "/testimoni", label: "Testimoni" },
+  { href: "/berita", label: "Berita" },
+  { href: "/kontak", label: "Kontak" },
 ];
 
 export function LandingNavbar({ user }: { user: UserProfile | null }) {
+  const pathname = usePathname();
   return (
     <>
       {/* Top Floating Glass Pill Navbar (Desktop Only) */}
@@ -52,15 +54,20 @@ export function LandingNavbar({ user }: { user: UserProfile | null }) {
 
           {/* Center Nav Links (Desktop) */}
           <nav className="hidden lg:flex items-center gap-5 text-xs font-medium text-white/80">
-            {navLinks.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
-                className="transition-colors hover:text-white"
-              >
-                {l.label}
-              </a>
-            ))}
+            {navLinks.map((l) => {
+              const active = l.href === "/" ? pathname === "/" : pathname.startsWith(l.href);
+              return (
+                <Link
+                  key={l.href}
+                  href={l.href}
+                  className={`transition-colors hover:text-white ${
+                    active ? "text-white font-semibold underline decoration-[#FF6B4A] decoration-2 underline-offset-4" : ""
+                  }`}
+                >
+                  {l.label}
+                </Link>
+              );
+            })}
           </nav>
 
           {/* Right Glass Actions */}
@@ -137,13 +144,13 @@ export function LandingNavbar({ user }: { user: UserProfile | null }) {
                 </SheetHeader>
                 <div className="flex flex-col gap-1.5">
                   {navLinks.map((l) => (
-                    <a
+                    <Link
                       key={l.href}
                       href={l.href}
                       className="rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-muted min-h-[44px] flex items-center"
                     >
                       {l.label}
-                    </a>
+                    </Link>
                   ))}
                   <div className="mt-4 flex flex-col gap-2 border-t pt-4">
                     {user?.role === "ADMIN" && (
@@ -179,20 +186,24 @@ export function LandingNavbar({ user }: { user: UserProfile | null }) {
         className="fixed bottom-3 left-3 right-3 z-50 mx-auto max-w-md lg:hidden pb-[env(safe-area-inset-bottom)]"
       >
         <div className="grid grid-cols-5 items-center gap-1 rounded-full border border-white/25 bg-slate-950/65 p-1.5 text-white shadow-2xl backdrop-blur-xl">
-          <a
-            href="#beranda"
-            className="flex min-h-[44px] flex-col items-center justify-center gap-0.5 rounded-full text-[10px] font-medium text-white/80 transition-colors hover:bg-white/10 hover:text-white"
+          <Link
+            href="/"
+            className={`flex min-h-[44px] flex-col items-center justify-center gap-0.5 rounded-full text-[10px] font-medium transition-colors ${
+              pathname === "/" ? "bg-white/15 text-white" : "text-white/80 hover:bg-white/10 hover:text-white"
+            }`}
           >
             <Home className="size-4 stroke-[1.75]" />
             <span>Beranda</span>
-          </a>
-          <a
-            href="#program"
-            className="flex min-h-[44px] flex-col items-center justify-center gap-0.5 rounded-full text-[10px] font-medium text-white/80 transition-colors hover:bg-white/10 hover:text-white"
+          </Link>
+          <Link
+            href="/program"
+            className={`flex min-h-[44px] flex-col items-center justify-center gap-0.5 rounded-full text-[10px] font-medium transition-colors ${
+              pathname.startsWith("/program") ? "bg-white/15 text-white" : "text-white/80 hover:bg-white/10 hover:text-white"
+            }`}
           >
             <Layers className="size-4 stroke-[1.75]" />
             <span>Program</span>
-          </a>
+          </Link>
           <Link
             href="/tryout"
             className="flex min-h-[44px] flex-col items-center justify-center gap-0.5 rounded-full bg-[#2B44FF] text-[10px] font-semibold text-white shadow-md transition-transform active:scale-95"
@@ -200,13 +211,15 @@ export function LandingNavbar({ user }: { user: UserProfile | null }) {
             <BookOpen className="size-4 stroke-[1.75]" />
             <span>TryOut</span>
           </Link>
-          <a
-            href="#tim"
-            className="flex min-h-[44px] flex-col items-center justify-center gap-0.5 rounded-full text-[10px] font-medium text-white/80 transition-colors hover:bg-white/10 hover:text-white"
+          <Link
+            href="/tim"
+            className={`flex min-h-[44px] flex-col items-center justify-center gap-0.5 rounded-full text-[10px] font-medium transition-colors ${
+              pathname.startsWith("/tim") ? "bg-white/15 text-white" : "text-white/80 hover:bg-white/10 hover:text-white"
+            }`}
           >
             <Users className="size-4 stroke-[1.75]" />
             <span>Tim</span>
-          </a>
+          </Link>
           <Link
             href={user ? (user.role === "ADMIN" ? "/admin" : "/tryout") : "/login"}
             className="flex min-h-[44px] flex-col items-center justify-center gap-0.5 rounded-full text-[10px] font-medium text-white/80 transition-colors hover:bg-white/10 hover:text-white"

@@ -273,6 +273,14 @@ export function LandingTestimonialsAndNews({
               Wawasan &amp; Strategi{" "}
               <span className="text-[#2B44FF]">Terbaru UTBK</span>
             </h2>
+            <div>
+              <Link
+                href="/berita"
+                className="text-xs font-semibold text-[#5B6CFF] hover:underline"
+              >
+                Lihat Semua Artikel &rarr;
+              </Link>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 gap-5 md:grid-cols-3">

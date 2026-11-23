@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
 import Lenis from "lenis";
@@ -212,25 +213,33 @@ export function LandingMentors({ mentors }: { mentors: SanityMentor[] }) {
             </h2>
           </div>
 
-          <div className="inline-flex rounded-full border bg-muted/50 p-1 text-xs">
-            {[
-              { id: "tim-inti", label: "Tim Inti" },
-              { id: "tim-mentor", label: "Tim Mentor" },
-              { id: "all", label: "Semua" },
-            ].map((t) => (
-              <button
-                key={t.id}
-                type="button"
-                onClick={() => setFilter(t.id as any)}
-                className={`rounded-full px-3.5 py-1.5 font-medium transition-colors ${
-                  filter === t.id
-                    ? "bg-[#2B44FF] text-white shadow-sm"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                {t.label}
-              </button>
-            ))}
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="inline-flex rounded-full border bg-muted/50 p-1 text-xs">
+              {[
+                { id: "tim-inti", label: "Tim Inti" },
+                { id: "tim-mentor", label: "Tim Mentor" },
+                { id: "all", label: "Semua" },
+              ].map((t) => (
+                <button
+                  key={t.id}
+                  type="button"
+                  onClick={() => setFilter(t.id as any)}
+                  className={`rounded-full px-3.5 py-1.5 font-medium transition-colors ${
+                    filter === t.id
+                      ? "bg-[#2B44FF] text-white shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {t.label}
+                </button>
+              ))}
+            </div>
+            <Link
+              href="/tim"
+              className="text-xs font-semibold text-[#5B6CFF] hover:underline whitespace-nowrap"
+            >
+              Lihat Semua &rarr;
+            </Link>
           </div>
         </div>
 

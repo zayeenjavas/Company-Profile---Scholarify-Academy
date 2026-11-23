@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import {
@@ -26,10 +26,21 @@ export function LoginForm() {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberUsername, setRememberUsername] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [googleEnabled, setGoogleEnabled] = useState<boolean | null>(null);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("scholarify_saved_username");
+    if (saved) setUsername(saved);
+    fetch("/api/v1/auth/providers")
+      .then((r) => r.json())
+      .then((d) => setGoogleEnabled(Boolean(d?.google)))
+      .catch(() => setGoogleEnabled(false));
+  }, []);
 
   const onGoogleSignIn = async () => {
     setErr(null);
@@ -65,6 +76,11 @@ export function LoginForm() {
       });
 
       setStoredToken(data.token);
+      if (rememberUsername) {
+        localStorage.setItem("scholarify_saved_username", username);
+      } else {
+        localStorage.removeItem("scholarify_saved_username");
+      }
 
       if (data.user.role === "ADMIN") {
         window.location.href = "/admin";
@@ -183,7 +199,12 @@ export function LoginForm() {
         type="button"
         variant="outline"
         onClick={onGoogleSignIn}
-        disabled={googleLoading}
+        disabled={googleLoading || googleEnabled === false}
+        title={
+          googleEnabled === false
+            ? "Tambahkan GOOGLE_CLIENT_ID & GOOGLE_CLIENT_SECRET di Vercel untuk mengaktifkan"
+            : undefined
+        }
         className="h-11 w-full rounded-xl gap-2.5 border-[var(--input)] bg-[var(--surface)] text-xs font-semibold text-[var(--foreground)] hover:bg-[var(--muted)]"
       >
         <svg className="size-4" viewBox="0 0 24 24" aria-hidden>
@@ -204,7 +225,11 @@ export function LoginForm() {
             d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.62l3.99 3.14c.95-2.85 3.6-4.96 6.72-4.96Z"
           />
         </svg>
-        {googleLoading ? "Menghubungkan ke Google..." : "Masuk dengan Google"}
+        {googleLoading
+          ? "Menghubungkan ke Google..."
+          : googleEnabled === false
+          ? "Masuk dengan Google (Belum Aktif — Setup Env)"
+          : "Masuk dengan Google"}
       </Button>
     </div>
   );

@@ -17,10 +17,11 @@ export function LandingHero({
   const isSubscribed = Boolean(user?.subscription.isActive);
 
   return (
-    <section
-      id="beranda"
-      className="relative flex min-h-screen min-h-[100dvh] flex-col justify-between overflow-hidden bg-[#061124] pt-8 lg:pt-24 text-white"
-    >
+    <>
+      <section
+        id="beranda"
+        className="relative flex min-h-screen min-h-[100dvh] flex-col justify-between overflow-hidden bg-[#061124] pt-8 lg:pt-24 text-white"
+      >
       {/* Full-bleed Cinematic Looping Video Background (preserved from scholarify.id) */}
       <video
         className="pointer-events-none absolute inset-0 h-full w-full object-cover"
@@ -99,16 +100,17 @@ export function LandingHero({
           </button>
         </div>
       </div>
+      </section>
 
-      {/* Strip Fitur Royal Blue */}
-      <div className="relative z-10 bg-[#2B44FF]/95 backdrop-blur text-white">
-        <div className="mx-auto grid max-w-6xl grid-cols-2 gap-4 px-4 py-3.5 text-center text-xs font-semibold sm:grid-cols-4 sm:px-6 sm:text-sm">
+      {/* Strip Fitur Royal Blue (di bawah hero full-screen) */}
+      <div className="relative z-10 bg-[#2B44FF] text-white">
+        <div className="mx-auto grid max-w-6xl grid-cols-2 gap-4 px-4 py-4 text-center text-xs font-semibold sm:grid-cols-4 sm:px-6 sm:text-sm">
           <div>45+ Mentor Berpengalaman</div>
           <div>140+ Bank Soal Terkurasi</div>
           <div>Timer Tersinkron Server</div>
           <div>Pembahasan Lengkap</div>
         </div>
       </div>
-    </section>
+    </>
   );
 }

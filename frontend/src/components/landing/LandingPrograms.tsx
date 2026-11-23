@@ -34,7 +34,7 @@ export function LandingPrograms() {
   const [active, setActive] = useState(programs[0]);
 
   return (
-    <section id="program" className="bg-[#1E34C8] text-white py-14 sm:py-16">
+    <section id="program" className="bg-[#1E34C8] text-white pt-20 pb-16 sm:pt-28 sm:pb-24">
       <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-8 px-4 sm:px-6 lg:grid-cols-12">
         <div className="space-y-6 lg:col-span-7">
           <div>

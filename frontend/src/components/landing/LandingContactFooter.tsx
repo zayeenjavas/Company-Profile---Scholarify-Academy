@@ -2,10 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Send } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { ChevronsRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -20,10 +18,11 @@ export function LandingContactFooter() {
 
   return (
     <>
-      <section id="kontak" className="bg-[#EEF1FF] dark:bg-muted/30 py-14 sm:py-16">
-        <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-8 px-4 sm:px-6 lg:grid-cols-12">
+      <section id="kontak" className="bg-background py-16 sm:py-24">
+        <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-10 px-4 sm:px-6 lg:grid-cols-12">
+          {/* Kiri: Visual Model Scholarify (Rounded-2xl) */}
           <div className="lg:col-span-5">
-            <div className="relative flex h-80 items-end justify-end overflow-hidden rounded-3xl border bg-[#DBEAFE] pl-6 pr-0 pt-6 shadow-md">
+            <div className="relative flex h-[360px] sm:h-[420px] items-end justify-end overflow-hidden rounded-2xl bg-[#DBEAFE] pl-6 pr-0 pt-6 shadow-md">
               <img
                 src="/images/ig-models/cutout-male-pointing.png"
                 alt="Hubungi Scholarify"
@@ -32,50 +31,89 @@ export function LandingContactFooter() {
             </div>
           </div>
 
-          <div className="lg:col-span-7">
-            <Card>
-              <CardContent className="p-6 sm:p-8 space-y-5">
-                <div className="space-y-1.5">
-                  <Badge variant="outline" className="border-[#2B44FF]/30 text-[#2B44FF] dark:text-primary">
-                    Hubungi Kami
-                  </Badge>
-                  <h2 className="text-2xl font-bold tracking-tight">
-                    Ada Pertanyaan Seputar{" "}
-                    <span className="text-[#2B44FF]">Program &amp; TryOut?</span>
-                  </h2>
-                </div>
+          {/* Kanan: Open Editorial Contact Form (tanpa kotak Card kaku, ala referensi) */}
+          <div className="space-y-6 lg:col-span-7">
+            <div className="space-y-2">
+              <div className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-widest text-[#5B6CFF]">
+                <span className="inline-flex h-2.5 w-2.5 rounded-full bg-[#5B6CFF]" />
+                HUBUNGI KAMI
+              </div>
+              <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-foreground sm:text-4xl leading-[1.15]">
+                Kami Siap Membantu &amp;
+                <span className="block">Mendengarkan Pertanyaanmu</span>
+              </h2>
+            </div>
 
-                {sent ? (
-                  <div className="rounded-xl border border-emerald-500/40 bg-emerald-500/10 p-4 text-sm text-emerald-700 dark:text-emerald-300">
-                    Terima kasih! Pesanmu sudah dicatat. Tim kami akan segera menghubungi kamu.
-                  </div>
-                ) : (
-                  <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    <div className="space-y-1.5">
-                      <Label htmlFor="contact-name">Nama Lengkap</Label>
-                      <Input id="contact-name" placeholder="Nama kamu" required />
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label htmlFor="contact-email">Email</Label>
-                      <Input id="contact-email" type="email" placeholder="email@contoh.com" required />
-                    </div>
-                    <div className="space-y-1.5 sm:col-span-2">
-                      <Label htmlFor="contact-msg">Pesan</Label>
-                      <Textarea id="contact-msg" rows={3} placeholder="Tulis pertanyaanmu..." required />
-                    </div>
-                    <div className="sm:col-span-2">
-                      <Button
-                        type="submit"
-                        className="min-h-[44px] rounded-full bg-[#2B44FF] hover:bg-[#1E34C8] text-white gap-2 px-6"
-                      >
-                        Kirim Pesan
-                        <Send className="size-4" />
-                      </Button>
-                    </div>
-                  </form>
-                )}
-              </CardContent>
-            </Card>
+            {sent ? (
+              <div className="rounded-2xl border border-emerald-500/40 bg-emerald-500/10 p-5 text-sm text-emerald-700 dark:text-emerald-300">
+                Terima kasih! Pesanmu sudah dicatat. Tim Scholarify akan segera menghubungi kamu.
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div className="space-y-1.5">
+                  <Label htmlFor="contact-name" className="text-xs font-semibold text-slate-700 dark:text-foreground">
+                    Nama Lengkap
+                  </Label>
+                  <Input
+                    id="contact-name"
+                    placeholder="Nama lengkap kamu"
+                    className="h-11 rounded-lg border-slate-200 dark:border-border bg-white dark:bg-card"
+                    required
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="contact-email" className="text-xs font-semibold text-slate-700 dark:text-foreground">
+                    Email *
+                  </Label>
+                  <Input
+                    id="contact-email"
+                    type="email"
+                    placeholder="email@contoh.com"
+                    className="h-11 rounded-lg border-slate-200 dark:border-border bg-white dark:bg-card"
+                    required
+                  />
+                </div>
+                <div className="space-y-1.5 sm:col-span-2">
+                  <Label htmlFor="contact-subject" className="text-xs font-semibold text-slate-700 dark:text-foreground">
+                    Subjek *
+                  </Label>
+                  <Input
+                    id="contact-subject"
+                    placeholder="Tulis topik pertanyaanmu (mis. TryOut / Kelas Intensif)"
+                    className="h-11 rounded-lg border-slate-200 dark:border-border bg-white dark:bg-card"
+                    required
+                  />
+                </div>
+                <div className="space-y-1.5 sm:col-span-2">
+                  <Label htmlFor="contact-msg" className="text-xs font-semibold text-slate-700 dark:text-foreground">
+                    Pesan *
+                  </Label>
+                  <Textarea
+                    id="contact-msg"
+                    rows={4}
+                    placeholder="Tulis pesanmu di sini..."
+                    className="rounded-lg border-slate-200 dark:border-border bg-white dark:bg-card"
+                    required
+                  />
+                </div>
+                <div className="pt-1 sm:col-span-2 flex items-center gap-1.5">
+                  <Button
+                    type="submit"
+                    className="min-h-[42px] rounded-full bg-[#5B6CFF] hover:bg-[#4657EB] text-white px-6 text-xs font-semibold"
+                  >
+                    Kirim Pesan
+                  </Button>
+                  <Button
+                    type="submit"
+                    size="icon"
+                    aria-label="Kirim"
+                    className="h-[42px] w-[42px] rounded-full bg-[#5B6CFF] hover:bg-[#4657EB] text-white"
+                  >
+                    <ChevronsRight className="size-4" />
+                  </Button>
+                </div>
+              </form>
+            )}
           </div>
         </div>
       </section>

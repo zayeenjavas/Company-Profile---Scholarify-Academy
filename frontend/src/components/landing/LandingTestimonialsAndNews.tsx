@@ -123,11 +123,17 @@ export function LandingTestimonialsAndNews({
 
                   <div className="h-full w-full overflow-hidden rounded-full bg-white p-1.5 shadow-md">
                     {current.fotoUrl ? (
-                      <img
-                        src={current.fotoUrl}
-                        alt={current.nama}
-                        className="h-full w-full rounded-full object-cover object-top"
-                      />
+                      <div className="h-full w-full overflow-hidden rounded-full">
+                        <img
+                          src={current.fotoUrl}
+                          alt={current.nama}
+                          className={
+                            current.nama.toLowerCase().includes("aurelia")
+                              ? "h-full w-full object-cover object-bottom origin-[42%_88%] scale-[2.3]"
+                              : "h-full w-full object-cover object-center"
+                          }
+                        />
+                      </div>
                     ) : (
                       <div className="flex h-full w-full items-center justify-center rounded-full bg-[#4F6BFF]/10 text-3xl font-bold text-[#4F6BFF]">
                         {current.nama.slice(0, 2).toUpperCase()}

@@ -8,8 +8,13 @@ export interface AuthTokenPayload {
 }
 
 const getJwtSecret = () => {
-  const secret =
-    process.env.JWT_SECRET || "scholarify-dev-secret-change-in-production-32chars";
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    if (process.env.NODE_ENV === "production") {
+      throw new Error("JWT_SECRET environment variable is required in production");
+    }
+    return new TextEncoder().encode("scholarify-dev-secret-change-in-production-32chars");
+  }
   return new TextEncoder().encode(secret);
 };
 

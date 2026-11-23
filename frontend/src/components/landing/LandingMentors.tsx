@@ -7,7 +7,6 @@ import { motion } from "motion/react";
 import { Crown, GraduationCap, Plus } from "lucide-react";
 import type { SanityMentor } from "@/src/api/sanity";
 import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
 
 const cardBackdrops = [
   "bg-[#F6A5B8] dark:bg-rose-950/60",
@@ -262,18 +261,18 @@ export function LandingMentors({ mentors }: { mentors: SanityMentor[] }) {
                       : "w-[220px] sm:w-[250px]"
                   }`}
                 >
-                  <Card
-                    className={`group h-full overflow-hidden rounded-2xl border border-slate-200/80 dark:border-border bg-white dark:bg-card shadow-[0_6px_24px_rgba(15,23,42,0.05)] transition-shadow hover:shadow-[0_12px_32px_rgba(43,68,255,0.12)] ${
-                      founder ? "ring-2 ring-[#4F6BFF]/80" : ""
+                  <div
+                    className={`group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/80 dark:border-border bg-white dark:bg-card p-1.5 shadow-[0_8px_28px_rgba(15,23,42,0.06)] transition-shadow hover:shadow-[0_14px_34px_rgba(79,107,255,0.14)] ${
+                      founder ? "ring-2 ring-[#4F6BFF]/85" : ""
                     }`}
                   >
                     <div
-                      className={`relative aspect-[4/4.3] w-full overflow-hidden flex items-center justify-center ${
+                      className={`relative aspect-[4/4.1] w-full overflow-hidden rounded-xl flex items-center justify-center ${
                         cardBackdrops[idx % cardBackdrops.length]
                       }`}
                     >
                       {founder && (
-                        <Badge className="absolute top-3 left-3 z-20 bg-[#2B44FF] text-white gap-1 shadow-sm">
+                        <Badge className="absolute top-2.5 left-2.5 z-20 bg-[#2B44FF] text-white gap-1 shadow-sm">
                           <Crown className="size-3" />
                           Founder
                         </Badge>
@@ -307,30 +306,30 @@ export function LandingMentors({ mentors }: { mentors: SanityMentor[] }) {
                         </div>
                       )}
 
-                      {/* Smooth Bell-Curve Wave Overlay (ala referensi) */}
+                      {/* Smooth Bell-Curve Wave Overlay flush at bottom of portrait */}
                       <svg
-                        viewBox="0 0 400 48"
+                        viewBox="0 0 400 44"
                         preserveAspectRatio="none"
-                        className="pointer-events-none absolute -bottom-px left-0 z-10 h-9 w-full text-white dark:text-card fill-current"
+                        className="pointer-events-none absolute -bottom-px left-0 z-10 h-8 w-full text-white dark:text-card fill-current"
                       >
-                        <path d="M0,48 L0,38 Q120,38 200,8 Q280,38 400,38 L400,48 Z" />
+                        <path d="M0,44 L0,38 C115,38 158,6 200,6 C242,6 285,38 400,38 L400,44 Z" />
                       </svg>
                     </div>
 
                     <div
-                      className="relative bg-white dark:bg-card px-4 pb-5 pt-5 text-center"
+                      className="relative flex-1 rounded-b-xl bg-white dark:bg-card px-3 pb-3.5 pt-4 text-center"
                       style={{
                         backgroundImage:
                           "radial-gradient(rgba(148, 163, 184, 0.22) 1px, transparent 1px)",
                         backgroundSize: "10px 10px",
                       }}
                     >
-                      <div className="absolute left-1/2 -top-7 z-20 flex h-10 w-10 -translate-x-1/2 items-center justify-center rounded-full border-[3px] border-white dark:border-card bg-[#4F6BFF] text-white shadow-md overflow-hidden">
+                      <div className="absolute left-1/2 -top-6 z-20 flex h-9 w-9 -translate-x-1/2 items-center justify-center rounded-full border-[3px] border-white dark:border-card bg-[#5B6CFF] text-white shadow-sm overflow-hidden">
                         {m.logoKampusUrl ? (
                           <img
                             src={m.logoKampusUrl}
                             alt={m.kampus}
-                            className="h-6 w-6 rounded-full bg-white object-contain p-0.5"
+                            className="h-5 w-5 rounded-full bg-white object-contain p-0.5"
                           />
                         ) : (
                           <Plus className="size-4 stroke-[2.5]" />
@@ -343,12 +342,12 @@ export function LandingMentors({ mentors }: { mentors: SanityMentor[] }) {
                       <p className="mt-0.5 truncate text-xs text-slate-500 dark:text-muted-foreground">
                         {m.jabatan}
                       </p>
-                      <p className="mt-1 inline-flex items-center gap-1 rounded-full bg-slate-100 dark:bg-muted px-2 py-0.5 text-[10px] font-medium text-slate-600 dark:text-muted-foreground">
-                        <GraduationCap className="size-3 text-[#4F6BFF]" />
+                      <p className="mt-1.5 inline-flex items-center gap-1 rounded-full bg-slate-100 dark:bg-muted px-2 py-0.5 text-[10px] font-medium text-slate-600 dark:text-muted-foreground">
+                        <GraduationCap className="size-3 text-[#5B6CFF]" />
                         {m.kampus}
                       </p>
                     </div>
-                  </Card>
+                  </div>
                 </motion.div>
               );
             })}

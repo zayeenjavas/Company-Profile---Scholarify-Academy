@@ -9,6 +9,7 @@ import {
   Home,
   Layers,
   Menu,
+  MessageSquare,
   ShieldCheck,
   User,
 } from "lucide-react";
@@ -37,12 +38,6 @@ const navLinks = [
 export function LandingNavbar({ user }: { user: UserProfile | null }) {
   const pathname = usePathname();
   const [mobileSheetOpen, setMobileSheetOpen] = useState(false);
-  const accountHref = user ? (user.role === "ADMIN" ? "/admin" : "/dashboard") : "/login";
-  const accountLabel = user ? (user.role === "ADMIN" ? "Admin" : "Dashboard") : "Masuk";
-  const isAccountActive =
-    pathname.startsWith("/login") ||
-    pathname.startsWith("/dashboard") ||
-    pathname.startsWith("/admin");
 
   return (
     <>
@@ -228,13 +223,13 @@ export function LandingNavbar({ user }: { user: UserProfile | null }) {
             <span>TryOut</span>
           </Link>
           <Link
-            href={accountHref}
+            href="/kontak"
             className={`flex min-h-[44px] flex-col items-center justify-center gap-0.5 rounded-full text-[10px] font-medium transition-colors ${
-              isAccountActive ? "bg-white/15 text-white" : "text-white/80 hover:bg-white/10 hover:text-white"
+              pathname.startsWith("/kontak") ? "bg-white/15 text-white" : "text-white/80 hover:bg-white/10 hover:text-white"
             }`}
           >
-            <User className="size-4 stroke-[1.75]" />
-            <span>{accountLabel}</span>
+            <MessageSquare className="size-4 stroke-[1.75]" />
+            <span>Kontak</span>
           </Link>
           <button
             type="button"
@@ -292,11 +287,18 @@ export function LandingNavbar({ user }: { user: UserProfile | null }) {
                 </Link>
               )}
               {!user && (
-                <Link href="/login" onClick={() => setMobileSheetOpen(false)}>
-                  <Button variant="outline" className="w-full min-h-[44px]">
-                    Login
-                  </Button>
-                </Link>
+                <>
+                  <Link href="/login" onClick={() => setMobileSheetOpen(false)}>
+                    <Button variant="outline" className="w-full min-h-[44px]">
+                      Masuk
+                    </Button>
+                  </Link>
+                  <Link href="/register" onClick={() => setMobileSheetOpen(false)}>
+                    <Button variant="outline" className="w-full min-h-[44px]">
+                      Daftar Gratis
+                    </Button>
+                  </Link>
+                </>
               )}
               <Link href="/tryout" onClick={() => setMobileSheetOpen(false)}>
                 <Button className="w-full min-h-[44px] bg-[#2B44FF] hover:bg-[#1E34C8] text-white">

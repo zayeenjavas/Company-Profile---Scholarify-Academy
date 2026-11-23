@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Pencil, Plus, Search, Trash2, X } from "lucide-react";
+import { Copy, FolderInput, Pencil, Plus, Scale, Search, Trash2, X } from "lucide-react";
 import { apiRequest } from "@/src/api/client";
 import type { SubtestDto, TryoutPackageDto } from "@/src/api/contracts";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
@@ -62,6 +63,11 @@ export function AdminQuestionsTab() {
   const [explanation, setExplanation] = useState("");
   const [saving, setSaving] = useState(false);
 
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [bulkTargetPkg, setBulkTargetPkg] = useState("");
+  const [bulkWeight, setBulkWeight] = useState("2");
+  const [bulkRunning, setBulkRunning] = useState(false);
+
   const loadMeta = async () => {
     const [pRes, sRes] = await Promise.all([
       apiRequest<{ packages: TryoutPackageDto[] }>("/packages"),
@@ -85,8 +91,48 @@ export function AdminQuestionsTab() {
         `/admin/questions?${qs.toString()}`
       );
       setQuestions(res.items);
+      setSelectedIds([]);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const allSelected = questions.length > 0 && selectedIds.length === questions.length;
+
+  const toggleSelectAll = (checked: boolean) => {
+    setSelectedIds(checked ? questions.map((q) => q.id) : []);
+  };
+
+  const toggleSelectOne = (id: string, checked: boolean) => {
+    setSelectedIds((prev) =>
+      checked ? (prev.includes(id) ? prev : [...prev, id]) : prev.filter((x) => x !== id)
+    );
+  };
+
+  const runBulkAction = async (
+    payload:
+      | { action: "DELETE"; ids: string[] }
+      | { action: "MOVE" | "DUPLICATE"; ids: string[]; targetPackageId?: string }
+      | { action: "SET_WEIGHT"; ids: string[]; weight: number }
+  ) => {
+    if (payload.ids.length === 0) return;
+    if (
+      payload.action === "DELETE" &&
+      !confirm(`Hapus ${payload.ids.length} soal yang dipilih secara permanen?`)
+    ) {
+      return;
+    }
+    setBulkRunning(true);
+    try {
+      await apiRequest("/admin/questions/bulk", {
+        method: "POST",
+        body: JSON.stringify(payload),
+      });
+      await loadQuestions();
+    } catch (err: any) {
+      alert(err.message || "Gagal menjalankan aksi massal");
+    } finally {
+      setBulkRunning(false);
     }
   };
 
@@ -415,35 +461,163 @@ export function AdminQuestionsTab() {
         </div>
       </div>
 
+      {selectedIds.length > 0 && (
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[var(--brand)]/40 bg-[var(--card)] px-4 py-3 shadow-sm">
+          <div className="flex items-center gap-2.5">
+            <Badge className="bg-[var(--brand)] text-white tabular-nums">
+              {selectedIds.length} dipilih
+            </Badge>
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => setSelectedIds([])}
+              className="h-8 text-xs"
+            >
+              Batal
+            </Button>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            <Select
+              value={bulkTargetPkg}
+              onValueChange={(val) => val && setBulkTargetPkg(val)}
+            >
+              <SelectTrigger className="h-8 w-44 text-xs">
+                <SelectValue placeholder="Pilih paket tujuan..." />
+              </SelectTrigger>
+              <SelectContent>
+                {packages.map((p) => (
+                  <SelectItem key={p.id} value={p.id}>
+                    {p.slug} — {p.title}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Button
+              size="sm"
+              variant="outline"
+              disabled={bulkRunning || !bulkTargetPkg}
+              onClick={() =>
+                runBulkAction({
+                  action: "MOVE",
+                  ids: selectedIds,
+                  targetPackageId: bulkTargetPkg,
+                })
+              }
+              className="h-8 gap-1 text-xs"
+            >
+              <FolderInput className="size-3.5" />
+              Pindah
+            </Button>
+
+            <Button
+              size="sm"
+              variant="outline"
+              disabled={bulkRunning}
+              onClick={() =>
+                runBulkAction({
+                  action: "DUPLICATE",
+                  ids: selectedIds,
+                  targetPackageId: bulkTargetPkg || undefined,
+                })
+              }
+              className="h-8 gap-1 text-xs"
+            >
+              <Copy className="size-3.5" />
+              Duplikat
+            </Button>
+
+            <Select value={bulkWeight} onValueChange={(val) => val && setBulkWeight(val)}>
+              <SelectTrigger className="h-8 w-24 text-xs">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="1">Bobot 1</SelectItem>
+                <SelectItem value="2">Bobot 2</SelectItem>
+                <SelectItem value="3">Bobot 3</SelectItem>
+                <SelectItem value="5">Bobot 5</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Button
+              size="sm"
+              variant="outline"
+              disabled={bulkRunning}
+              onClick={() =>
+                runBulkAction({
+                  action: "SET_WEIGHT",
+                  ids: selectedIds,
+                  weight: Number(bulkWeight) || 1,
+                })
+              }
+              className="h-8 gap-1 text-xs"
+            >
+              <Scale className="size-3.5" />
+              Set Bobot
+            </Button>
+
+            <Button
+              size="sm"
+              variant="destructive"
+              disabled={bulkRunning}
+              onClick={() => runBulkAction({ action: "DELETE", ids: selectedIds })}
+              className="h-8 gap-1 text-xs"
+            >
+              <Trash2 className="size-3.5" />
+              Hapus ({selectedIds.length})
+            </Button>
+          </div>
+        </div>
+      )}
+
       <Card>
         <CardContent className="p-0 overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>
+                <TableHead className="w-10">
+                  <Checkbox
+                    checked={allSelected}
+                    onCheckedChange={(v) => toggleSelectAll(Boolean(v))}
+                    aria-label="Pilih semua soal"
+                  />
+                </TableHead>
                 <TableHead>Subtest / Paket</TableHead>
                 <TableHead>Pertanyaan</TableHead>
-                <TableHead>Kunci</TableHead>
+                <TableHead>Kunci / Bobot</TableHead>
                 <TableHead className="text-right">Aksi</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {loading ? (
                 <TableRow>
-                  <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
+                  <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
                     Memuat soal...
                   </TableCell>
                 </TableRow>
               ) : questions.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
+                  <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
                     Tidak ada soal ditemukan.
                   </TableCell>
                 </TableRow>
               ) : (
                 questions.map((q) => {
                   const correct = q.choices.find((c) => c.isCorrect)?.label || "-";
+                  const isChecked = selectedIds.includes(q.id);
                   return (
-                    <TableRow key={q.id}>
+                    <TableRow
+                      key={q.id}
+                      className={isChecked ? "bg-muted/50" : undefined}
+                    >
+                      <TableCell>
+                        <Checkbox
+                          checked={isChecked}
+                          onCheckedChange={(v) => toggleSelectOne(q.id, Boolean(v))}
+                          aria-label={`Pilih soal ${q.id}`}
+                        />
+                      </TableCell>
                       <TableCell className="whitespace-nowrap">
                         <Badge variant="secondary" className="mr-1.5">
                           {q.subtest.code}
@@ -457,8 +631,13 @@ export function AdminQuestionsTab() {
                           <RichMathText text={q.stemContent} />
                         </div>
                       </TableCell>
-                      <TableCell>
-                        <Badge variant="outline">{correct}</Badge>
+                      <TableCell className="whitespace-nowrap">
+                        <Badge variant="outline" className="mr-1">
+                          {correct}
+                        </Badge>
+                        <span className="font-mono text-[11px] text-muted-foreground">
+                          ×{q.weight}
+                        </span>
                       </TableCell>
                       <TableCell className="text-right whitespace-nowrap">
                         <Button

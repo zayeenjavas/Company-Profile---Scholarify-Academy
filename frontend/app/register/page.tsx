@@ -7,6 +7,7 @@ import { ArrowRight, Eye, EyeOff, Loader2, Lock, Mail, User, UserCheck } from "l
 import { apiRequest, setStoredToken } from "@/src/api/client";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 import { DensAuthShell } from "@/components/dens-auth-shell";
 import { DensInputGroup } from "@/src/components/admin/dens-ui";
 
@@ -19,6 +20,30 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
+
+  const onGoogleSignUp = async () => {
+    setError("");
+    setGoogleLoading(true);
+    try {
+      const res = await fetch("/api/auth/sign-in/social", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ provider: "google", callbackURL: "/tryout" }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data?.url) {
+        throw new Error(
+          data?.message ||
+            "Google Sign-In belum aktif. Pastikan GOOGLE_CLIENT_ID & GOOGLE_CLIENT_SECRET sudah diisi di Vercel."
+        );
+      }
+      window.location.href = data.url;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Gagal mendaftar dengan Google");
+      setGoogleLoading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -146,6 +171,38 @@ export default function RegisterPage() {
             )}
           </Button>
         </form>
+
+        <div className="my-6 flex items-center gap-3 text-xs text-[var(--muted-foreground)]">
+          <Separator className="flex-1" /> atau daftar dengan <Separator className="flex-1" />
+        </div>
+
+        <Button
+          type="button"
+          variant="outline"
+          onClick={onGoogleSignUp}
+          disabled={googleLoading}
+          className="h-11 w-full rounded-xl gap-2.5 text-xs font-semibold"
+        >
+          <svg className="size-4" viewBox="0 0 24 24" aria-hidden>
+            <path
+              fill="#4285F4"
+              d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17Z"
+            />
+            <path
+              fill="#34A853"
+              d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.11-6.72-4.96H1.29v3.14C3.26 21.3 7.31 24 12 24Z"
+            />
+            <path
+              fill="#FBBC05"
+              d="M5.28 14.24c-.24-.72-.38-1.49-.38-2.24s.14-1.52.38-2.24V6.62H1.29C.47 8.24 0 10.06 0 12s.47 3.76 1.29 5.38l3.99-3.14Z"
+            />
+            <path
+              fill="#EA4335"
+              d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.62l3.99 3.14c.95-2.85 3.6-4.96 6.72-4.96Z"
+            />
+          </svg>
+          {googleLoading ? "Menghubungkan ke Google..." : "Daftar dengan Google"}
+        </Button>
       </div>
     </DensAuthShell>
   );

@@ -36,6 +36,54 @@ export const auth = betterAuth({
       verify: async ({ hash, password }) => bcrypt.compare(password, hash),
     },
   },
+  socialProviders:
+    process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
+      ? {
+          google: {
+            clientId: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+          },
+        }
+      : undefined,
+  databaseHooks: {
+    user: {
+      create: {
+        before: async (user) => {
+          const u = user as Record<string, unknown>;
+          if (!u.username) {
+            const base = String(user.email?.split("@")[0] || user.name || "siswa")
+              .toLowerCase()
+              .replace(/[^a-z0-9_]/g, "")
+              .slice(0, 18);
+            const suffix = Math.random().toString(36).slice(2, 6);
+            const generated = `${base || "siswa"}_${suffix}`;
+            return {
+              data: {
+                ...user,
+                username: generated,
+                displayUsername: generated,
+              },
+            };
+          }
+          return { data: user };
+        },
+        after: async (user) => {
+          const exists = await prisma.subscription.findUnique({
+            where: { userId: user.id },
+          });
+          if (!exists) {
+            await prisma.subscription.create({
+              data: {
+                userId: user.id,
+                plan: "FREE",
+                status: "NONE",
+              },
+            });
+          }
+        },
+      },
+    },
+  },
   plugins: [username()],
   rateLimit: {
     enabled: true,

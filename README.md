@@ -1,13 +1,16 @@
 # Website Scholarify — Full TypeScript Platform
 
-Platform terpadu **Scholarify** yang menggabungkan **Landing Page**, **Portal TryOut UTBK CBT**, **Subscription Gating** (tampilan & akses berbeda untuk pengguna sudah langganan vs belum langganan), dan **Admin Dashboard 5 Tab** dalam satu arsitektur **Full TypeScript**.
+Platform terpadu **Scholarify** (`https://scholarify.id`) yang menggabungkan **Landing Page**, **Portal TryOut UTBK-SNBT CBT**, **Subscription Gating**, **Sanity CMS**, dan **CRM Admin Dashboard 6 Tab** dalam satu arsitektur **Full TypeScript**.
 
 ## Tech Stack
-- **Frontend & API:** Next.js 16 + React 19 + TypeScript + Tailwind CSS v4 + `shadcn/ui` (`dashboard-01`)
-- **Database & ORM:** Prisma ORM (SQLite untuk dev lokal, PostgreSQL untuk production)
-- **Keamanan & Validasi:** JWT (`jose`) via HttpOnly cookie & Bearer header + `bcryptjs` + Zod
-- **Testing & CI:** Vitest (`contractSmoke.test.ts`), `tsc --noEmit`, GitHub Actions (`.github/workflows/ci.yml`)
-- **PWA:** `public/manifest.webmanifest`, `public/theme-init.js` (*anti-flash*), `public/sw.js` (**Network-Only** untuk `/api/*`)
+- **Frontend & API:** Next.js 16 (Webpack) + React 19 + TypeScript + Tailwind CSS v4 + `shadcn/ui`
+- **Animasi & Smooth Scroll:** `gsap` + `motion` + `lenis` (vertical root scroll & horizontal team track)
+- **Matematika / LaTeX:** `katex` (editor toolbar ala MS Word di CRM Admin + rendering aman di CBT, pembahasan, dan berita)
+- **Database & ORM:** Prisma ORM (`schema.prisma` — SQLite `dev.db` lokal / PostgreSQL untuk production skala penuh)
+- **Keamanan & Validasi:** JWT (`jose`) via HttpOnly cookie & Bearer header + `bcryptjs` + Zod + Security Headers (`next.config.js`)
+- **CMS:** Sanity CMS (`gbwew0c6` / `production`) untuk Mentor, Testimoni, dan Berita
+- **Testing & CI/CD:** Vitest (`contractSmoke.test.ts`), `tsc --noEmit`, Vercel (`frontend/vercel.json`), GitHub Actions (`.github/workflows/ci.yml`)
+- **PWA:** `public/manifest.webmanifest`, `public/theme-init.js`, `public/sw.js` (**Network-Only** untuk `/api/*`)
 
 ---
 
@@ -20,19 +23,20 @@ flowchart LR
     Home -->|"Sudah Langganan (ACTIVE)"| Prem["Akses Penuh Semua Paket PUBLISHED"]
     Free --> Do["/tryout/[batchId]/do"]
     Prem --> Do
-    Do -->|"POST /api/v1/sessions/start"| CBT["/tryout/[batchId]/[subtest]\n(Timer Server + Auto-Save + Offline Queue)"]
+    Do -->|"POST /api/v1/sessions/start"| CBT["/tryout/[batchId]/[subtest]\n(Timer Server + KaTeX + Offline Queue)"]
     CBT -->|"POST /api/v1/sessions/:id/submit"| Graded["Skor Atomik (DINILAI)"]
-    Graded --> Review["/tryout/review/[sessionId]\n(Kunci & Pembahasan)"]
+    Graded --> Review["/tryout/review/[sessionId]\n(Kunci & Pembahasan KaTeX)"]
 ```
 
-### 2. Alur Admin Dashboard (`/admin`)
+### 2. Alur CRM Admin Dashboard (`/admin`)
 ```mermaid
 flowchart LR
-    Admin["/admin (JWT Role: ADMIN)"] --> Tab1["Overview & Analitik\n(/api/v1/admin/overview)"]
-    Admin --> Tab2["Paket Tryout\n(DRAFT -> PUBLISHED -> ARCHIVED)"]
-    Admin --> Tab3["Bank Soal\n(/api/v1/admin/questions)"]
-    Admin --> Tab4["Monitoring & Hasil\n(Force Finish / Reset / CSV)"]
+    Admin["/admin (JWT Role: ADMIN)"] --> Tab1["Overview & Analitik"]
+    Admin --> Tab2["Paket TryOut\n(DRAFT -> PUBLISHED -> ARCHIVED)"]
+    Admin --> Tab3["Bank Soal\n(Create/Edit + LaTeX Word Toolbar)"]
+    Admin --> Tab4["Monitoring & Hasil\n(Force Finish / Reset)"]
     Admin --> Tab5["Pengguna & Langganan\n(FREE <-> PREMIUM)"]
+    Admin --> Tab6["Sanity CMS\n(Mentor / Testimoni / Berita LaTeX)"]
 ```
 
 ---
@@ -41,10 +45,10 @@ flowchart LR
 
 ```powershell
 cd frontend
-npm install --legacy-peer-deps
+npm install
 npx prisma generate
 npx prisma db push
-npx tsx prisma/seed.ts
+.\node_modules\.bin\tsx.cmd prisma/seed.ts
 npm run dev
 ```
 
@@ -52,25 +56,35 @@ Akses di browser:
 - **Beranda / Landing Page:** `http://localhost:3000/`
 - **Login:** `http://localhost:3000/login`
 - **Portal TryOut:** `http://localhost:3000/tryout`
-- **Admin Dashboard:** `http://localhost:3000/admin`
+- **Admin CRM Dashboard:** `http://localhost:3000/admin`
 
-**Akun Demo (`prisma/seed.ts`):**
-- **Admin:** `admin` / `admin123`
-- **Siswa Gratis (Belum Langganan):** `siswa_free` / `siswa123`
-- **Siswa Premium (Sudah Langganan):** `siswa_premium` / `siswa123`
+**Akun Demo (`frontend/prisma/seed.ts`):**
+- **Admin:** `admin_scholarify` / `Scholarifysuskesbarokah313`
+- **Siswa Gratis:** `siswa_free` / `siswa123`
+- **Siswa Premium:** `siswa_premium` / `siswa123`
 
-## Verifikasi & Testing
+*Seed data lengkap mencakup 13 user, 7 subtes UTBK (`PU`, `PPU`, `PBM`, `PK`, `LBI`, `LBE`, `PM`), 7 paket tryout, 295 soal dengan pembahasan, 18 sesi ujian, dan 15 hasil nilai.*
+
+## Verifikasi & Build
 ```powershell
 cd frontend
-npx tsc --noEmit
+.\node_modules\.bin\tsc.cmd --noEmit
 npm test
 npm run build
 ```
 
 ---
 
-## Struktur Folder Lain di Repository
-- `backend/` — Arsip backend Django lama (datanya sudah dimigrasikan lewat `prisma/seed.ts`).
-- `landing-page/` — Arsip landing page statis lama + Sanity.
-- `scholarify-admin/` — Aplikasi Laravel terpisah (tidak disentuh).
-- [PRD.md](file:///c:/Users/ThinkPad/Documents/PROJECT/Website%20Scholarify/PRD.md) — Product Requirements Document lengkap.
+## Struktur Direktori
+```text
+Website Scholarify/
+├── .github/workflows/ci.yml   # Pipeline CI frontend
+├── PRD.md                     # Product Requirements Document
+├── README.md                  # Dokumentasi utama proyek
+└── frontend/                  # Aplikasi Full TypeScript (Next.js + Prisma + Vercel Root)
+    ├── app/                   # Halaman App Router & API /api/v1/*
+    ├── components/            # Komponen shadcn/ui & login-form
+    ├── prisma/                # schema.prisma, dev.db, seed.ts, seed-bank-soal.ts
+    ├── public/                # Studio portraits (14 anggota), IG model cutouts, PWA assets
+    └── src/                   # api/, components/ (landing/admin/exam/common), server/, types/, utils/
+```

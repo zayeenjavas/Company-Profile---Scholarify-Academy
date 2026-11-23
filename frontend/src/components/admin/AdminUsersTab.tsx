@@ -1,7 +1,20 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Plus, Trash2, Crown, UserCheck, UserX, Upload, Ticket, Pencil, X } from "lucide-react";
+import {
+  Ban,
+  CheckCircle2,
+  Crown,
+  Pencil,
+  Plus,
+  Ticket,
+  Trash2,
+  Upload,
+  UserCheck,
+  UserX,
+  X,
+} from "lucide-react";
+import { toast } from "sonner";
 import { apiRequest } from "@/src/api/client";
 import type { UserDto } from "@/src/api/contracts";
 import { Button } from "@/components/ui/button";
@@ -89,9 +102,10 @@ export function AdminUsersTab() {
       });
       setEditingUser(null);
       setEditPassword("");
+      toast.success(`Data @${editingUser.username} berhasil diperbarui`);
       await load();
     } catch (err: any) {
-      alert(err.message || "Gagal memperbarui pengguna");
+      toast.error(err.message || "Gagal memperbarui pengguna");
     } finally {
       setEditSaving(false);
     }
@@ -143,9 +157,10 @@ export function AdminUsersTab() {
         method: "PATCH",
         body: JSON.stringify(payload),
       });
+      toast.success(`Aksi massal berhasil diterapkan ke ${payload.ids.length} pengguna`);
       await load();
     } catch (err: any) {
-      alert(err.message || "Gagal menjalankan aksi massal pengguna");
+      toast.error(err.message || "Gagal menjalankan aksi massal pengguna");
     } finally {
       setBulkRunning(false);
     }
@@ -231,9 +246,10 @@ export function AdminUsersTab() {
       setName("");
       setPassword("");
       setShowForm(false);
+      toast.success("Akun siswa berhasil dibuat");
       await load();
     } catch (err: any) {
-      alert(err.message || "Gagal membuat pengguna");
+      toast.error(err.message || "Gagal membuat pengguna");
     } finally {
       setSaving(false);
     }
@@ -241,32 +257,62 @@ export function AdminUsersTab() {
 
   const toggleSubscription = async (u: UserDto) => {
     const active = u.subscription.is_active;
-    await apiRequest(`/admin/users/${u.id}`, {
-      method: "PATCH",
-      body: JSON.stringify({
-        subscriptionPlan: active ? "FREE" : "PREMIUM",
-        subscriptionStatus: active ? "NONE" : "ACTIVE",
-        durationDays: 90,
-      }),
-    });
-    await load();
+    try {
+      await apiRequest(`/admin/users/${u.id}`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          subscriptionPlan: active ? "FREE" : "PREMIUM",
+          subscriptionStatus: active ? "NONE" : "ACTIVE",
+          durationDays: 90,
+        }),
+      });
+      toast.success(
+        active
+          ? `Akses Premium @${u.username} dicabut`
+          : `Premium 90 hari diaktifkan untuk @${u.username}`
+      );
+      await load();
+    } catch (err: any) {
+      toast.error(err.message || "Gagal mengubah langganan");
+    }
   };
 
   const toggleActive = async (u: UserDto) => {
-    await apiRequest(`/admin/users/${u.id}`, {
-      method: "PATCH",
-      body: JSON.stringify({ isActive: !u.is_active }),
-    });
-    await load();
+    if (u.role === "ADMIN") {
+      toast.error("Akun ADMIN tidak dapat dinonaktifkan dari daftar ini");
+      return;
+    }
+    if (u.is_active && !confirm(`Nonaktifkan akun @${u.username}? Pengguna tidak akan bisa login.`)) {
+      return;
+    }
+    try {
+      await apiRequest(`/admin/users/${u.id}`, {
+        method: "PATCH",
+        body: JSON.stringify({ isActive: !u.is_active }),
+      });
+      toast.success(
+        u.is_active
+          ? `Akun @${u.username} dinonaktifkan`
+          : `Akun @${u.username} diaktifkan kembali`
+      );
+      await load();
+    } catch (err: any) {
+      toast.error(err.message || "Gagal mengubah status akun");
+    }
   };
 
   const deleteUser = async (u: UserDto) => {
+    if (u.role === "ADMIN") {
+      toast.error("Akun ADMIN tidak dapat dihapus");
+      return;
+    }
     if (!confirm(`Hapus pengguna @${u.username}?`)) return;
     try {
       await apiRequest(`/admin/users/${u.id}`, { method: "DELETE" });
+      toast.success(`Pengguna @${u.username} berhasil dihapus`);
       await load();
     } catch (err: any) {
-      alert(err.message || "Gagal menghapus pengguna");
+      toast.error(err.message || "Gagal menghapus pengguna");
     }
   };
 
@@ -584,7 +630,10 @@ export function AdminUsersTab() {
                 users.map((u) => {
                   const isChecked = selectedIds.includes(u.id);
                   return (
-                  <TableRow key={u.id} className={isChecked ? "bg-muted/50" : undefined}>
+                  <TableRow
+                    key={u.id}
+                    className={`${isChecked ? "bg-muted/50" : ""} ${!u.is_active ? "opacity-65" : ""}`}
+                  >
                     <TableCell>
                       <Checkbox
                         checked={isChecked}
@@ -593,8 +642,17 @@ export function AdminUsersTab() {
                       />
                     </TableCell>
                     <TableCell>
-                      <div className="font-medium">{u.name}</div>
-                      <div className="text-xs text-muted-foreground">@{u.username}</div>
+                      <div className="flex items-center gap-2">
+                        {u.is_active ? (
+                          <CheckCircle2 className="size-4 shrink-0 text-emerald-500" />
+                        ) : (
+                          <Ban className="size-4 shrink-0 text-destructive" />
+                        )}
+                        <div>
+                          <div className="font-medium">{u.name}</div>
+                          <div className="text-xs text-muted-foreground">@{u.username}</div>
+                        </div>
+                      </div>
                     </TableCell>
                     <TableCell>
                       <Badge variant={u.role === "ADMIN" ? "default" : "secondary"}>
@@ -607,9 +665,17 @@ export function AdminUsersTab() {
                       </Badge>
                     </TableCell>
                     <TableCell>
-                      <Badge variant={u.is_active ? "outline" : "destructive"}>
-                        {u.is_active ? "Aktif" : "Nonaktif"}
-                      </Badge>
+                      {u.is_active ? (
+                        <Badge className="gap-1 bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30">
+                          <CheckCircle2 className="size-3" />
+                          Aktif
+                        </Badge>
+                      ) : (
+                        <Badge variant="destructive" className="gap-1">
+                          <Ban className="size-3" />
+                          Nonaktif
+                        </Badge>
+                      )}
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="inline-flex gap-1">
@@ -631,22 +697,28 @@ export function AdminUsersTab() {
                         >
                           <Pencil className="size-4" />
                         </Button>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => toggleActive(u)}
-                          title={u.is_active ? "Nonaktifkan" : "Aktifkan"}
-                        >
-                          {u.is_active ? <UserX className="size-4" /> : <UserCheck className="size-4" />}
-                        </Button>
-                        <Button
-                          size="icon"
-                          variant="ghost"
-                          className="text-destructive"
-                          onClick={() => deleteUser(u)}
-                        >
-                          <Trash2 className="size-4" />
-                        </Button>
+                        {u.role !== "ADMIN" && (
+                          <>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => toggleActive(u)}
+                              title={u.is_active ? "Nonaktifkan Akun" : "Aktifkan Akun"}
+                              className={u.is_active ? "text-amber-600 hover:text-amber-700" : "text-emerald-600 hover:text-emerald-700"}
+                            >
+                              {u.is_active ? <UserX className="size-4" /> : <UserCheck className="size-4" />}
+                            </Button>
+                            <Button
+                              size="icon"
+                              variant="ghost"
+                              className="text-destructive"
+                              onClick={() => deleteUser(u)}
+                              title="Hapus Pengguna"
+                            >
+                              <Trash2 className="size-4" />
+                            </Button>
+                          </>
+                        )}
                       </div>
                     </TableCell>
                   </TableRow>

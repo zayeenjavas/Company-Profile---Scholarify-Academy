@@ -19,8 +19,8 @@ export async function PATCH(
   req: Request,
   context: { params: Promise<{ userId: string }> }
 ) {
-  const { errorResponse } = await requireRole(req, "ADMIN");
-  if (errorResponse) return errorResponse;
+  const { user: adminUser, errorResponse } = await requireRole(req, "ADMIN");
+  if (errorResponse || !adminUser) return errorResponse!;
 
   try {
     const { userId } = await context.params;
@@ -34,6 +34,12 @@ export async function PATCH(
     }
 
     const d = parsed.data;
+    if (userId === adminUser.id && d.isActive === false) {
+      return NextResponse.json(
+        { error: "Tidak dapat menonaktifkan akun admin yang sedang digunakan" },
+        { status: 400 }
+      );
+    }
     const passwordHash = d.password ? await bcrypt.hash(d.password, 10) : undefined;
 
     const updated = await prisma.user.update({

@@ -2,11 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowDown, ArrowUp, Calendar, GraduationCap, Send, Star } from "lucide-react";
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Calendar, GraduationCap, Star } from "lucide-react";
 import type { SanityNews, SanityTestimonial } from "@/src/api/sanity";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { RichMathText } from "@/src/components/common/RichMathText";
 
 export function LandingTestimonialsAndNews({
@@ -19,7 +17,12 @@ export function LandingTestimonialsAndNews({
   news: SanityNews[];
 }) {
   const [tIdx, setTIdx] = useState(0);
+  const [newsPage, setNewsPage] = useState(0);
   const current = testimonials[tIdx] ?? testimonials[0];
+  const newsPerPage = 3;
+  const newsTotalPages = Math.max(1, Math.ceil(news.length / newsPerPage));
+  const safeNewsPage = Math.min(newsPage, newsTotalPages - 1);
+  const visibleNews = news.slice(safeNewsPage * newsPerPage, safeNewsPage * newsPerPage + newsPerPage);
 
   const prev = () =>
     setTIdx((i) => (i - 1 + testimonials.length) % Math.max(1, testimonials.length));
@@ -262,18 +265,42 @@ export function LandingTestimonialsAndNews({
         Testimoni Terverifikasi • TryOut UTBK • Pembahasan Lengkap • Scholarify
       </div>
 
-      {/* Berita & Artikel Terbaru */}
-      <section id="berita" className="bg-background py-14 sm:py-16">
-        <div className="mx-auto max-w-6xl space-y-8 px-4 sm:px-6">
+      {/* Berita & Artikel Terbaru (ala referensi Our Blogs) */}
+      <section id="berita" className="bg-background py-16 sm:py-20">
+        <div className="mx-auto max-w-6xl space-y-10 px-4 sm:px-6">
           <div className="text-center space-y-2">
-            <Badge variant="outline" className="border-[#2B44FF]/30 text-[#2B44FF] dark:text-primary">
-              Artikel &amp; Informasi
-            </Badge>
-            <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
-              Wawasan &amp; Strategi{" "}
-              <span className="text-[#2B44FF]">Terbaru UTBK</span>
+            <div className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-widest text-slate-600 dark:text-muted-foreground">
+              <span className="inline-flex h-2.5 w-2.5 rounded-full bg-[#4F6BFF]" />
+              ARTIKEL &amp; BLOG
+            </div>
+            <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-foreground sm:text-4xl leading-[1.15]">
+              Wawasan &amp; Strategi
+              <span className="block">
+                Terbaru{" "}
+                <span className="relative inline-block">
+                  <em
+                    className="italic font-normal text-[#4F6BFF]"
+                    style={{ fontFamily: "'Instrument Serif', Georgia, serif" }}
+                  >
+                    Artikel UTBK
+                  </em>
+                  <svg
+                    viewBox="0 0 150 10"
+                    fill="none"
+                    className="pointer-events-none absolute -bottom-1 left-0 w-full h-2 text-[#FF6B4A]"
+                    preserveAspectRatio="none"
+                  >
+                    <path
+                      d="M2 8C48 2 102 2 148 8"
+                      stroke="currentColor"
+                      strokeWidth="2.2"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </span>
+              </span>
             </h2>
-            <div>
+            <div className="pt-1">
               <Link
                 href="/berita"
                 className="text-xs font-semibold text-[#5B6CFF] hover:underline"
@@ -283,40 +310,106 @@ export function LandingTestimonialsAndNews({
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-            {news.map((item) => (
-              <Card key={item._id} className="flex flex-col justify-between overflow-hidden">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+            {visibleNews.map((item) => (
+              <div
+                key={item._id}
+                className="group flex flex-col justify-between rounded-2xl border border-slate-200/80 dark:border-border bg-white dark:bg-card p-3.5 shadow-[0_8px_28px_rgba(15,23,42,0.05)] transition-shadow hover:shadow-[0_14px_34px_rgba(79,107,255,0.12)]"
+              >
                 <div>
-                  <img
-                    src={item.gambarUrl || "/images/program-tryout.jpg"}
-                    alt={item.judul}
-                    className="h-44 w-full object-cover"
-                  />
-                  <CardHeader className="pb-2">
-                    <div className="inline-flex items-center gap-1.5 text-xs text-muted-foreground tabular-nums">
-                      <Calendar className="size-3.5" />
+                  <div className="overflow-hidden rounded-xl bg-slate-100 dark:bg-muted">
+                    <img
+                      src={item.gambarUrl || "/images/program-tryout.jpg"}
+                      alt={item.judul}
+                      className="h-44 w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                    />
+                  </div>
+
+                  <div className="mt-3.5 flex items-center gap-3 text-[11px] text-slate-500 dark:text-muted-foreground tabular-nums">
+                    <span className="inline-flex items-center gap-1">
+                      <Calendar className="size-3.5 text-[#5B6CFF]" />
                       {item.tanggal}
-                    </div>
-                    <CardTitle className="text-base leading-snug line-clamp-2 pt-1">
-                      {item.judul}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-xs leading-relaxed text-muted-foreground line-clamp-3">
-                      <RichMathText text={item.ringkasan} />
-                    </p>
-                  </CardContent>
+                    </span>
+                    <span className="text-slate-300 dark:text-border">•</span>
+                    <span>Strategi UTBK</span>
+                  </div>
+
+                  <h3 className="mt-2 line-clamp-2 text-base font-bold leading-snug text-slate-900 dark:text-foreground">
+                    {item.judul}
+                  </h3>
+
+                  <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-slate-500 dark:text-muted-foreground">
+                    <RichMathText text={item.ringkasan} />
+                  </p>
                 </div>
-                <CardFooter className="pt-0">
-                  <Link href={`/berita/${encodeURIComponent(item._id)}`} className="w-full">
-                    <Button variant="outline" size="sm" className="w-full rounded-full">
-                      Baca Selengkapnya
+
+                <div className="mt-4 flex items-center justify-between gap-2 border-t border-slate-100 dark:border-border pt-3.5">
+                  <Link href={`/berita/${encodeURIComponent(item._id)}`}>
+                    <Button
+                      size="sm"
+                      className="min-h-[36px] rounded-full bg-[#5B6CFF] hover:bg-[#4657EB] text-white px-4 text-xs font-semibold"
+                    >
+                      &raquo; Baca
                     </Button>
                   </Link>
-                </CardFooter>
-              </Card>
+
+                  <div className="flex items-center gap-2">
+                    <img
+                      src="/images/scholarify-logo.png"
+                      alt="Scholarify"
+                      className="h-7 w-7 rounded-full border bg-slate-50 object-contain p-0.5"
+                    />
+                    <div className="leading-tight">
+                      <p className="text-[11px] font-bold text-slate-900 dark:text-foreground">
+                        Tim Akademik
+                      </p>
+                      <p className="text-[10px] text-slate-500 dark:text-muted-foreground">
+                        Scholarify
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
+
+          {newsTotalPages > 1 && (
+            <div className="flex items-center justify-between pt-2">
+              <div className="flex items-center gap-2">
+                {Array.from({ length: newsTotalPages }).map((_, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setNewsPage(idx)}
+                    aria-label={`Halaman artikel ${idx + 1}`}
+                    className={`h-3 w-3 rounded-full transition-all ${
+                      idx === safeNewsPage
+                        ? "scale-110 bg-[#FF6B4A]"
+                        : "bg-slate-200 dark:bg-muted hover:bg-[#5B6CFF]/40"
+                    }`}
+                  />
+                ))}
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setNewsPage((p) => (p - 1 + newsTotalPages) % newsTotalPages)}
+                  aria-label="Artikel sebelumnya"
+                  className="flex h-9 w-9 items-center justify-center rounded-full border bg-white dark:bg-card text-slate-700 dark:text-foreground shadow-sm transition hover:bg-[#5B6CFF] hover:text-white"
+                >
+                  <ArrowLeft className="size-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setNewsPage((p) => (p + 1) % newsTotalPages)}
+                  aria-label="Artikel berikutnya"
+                  className="flex h-9 w-9 items-center justify-center rounded-full border bg-white dark:bg-card text-slate-700 dark:text-foreground shadow-sm transition hover:bg-[#5B6CFF] hover:text-white"
+                >
+                  <ArrowRight className="size-4" />
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </section>
     </>

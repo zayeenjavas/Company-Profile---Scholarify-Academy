@@ -150,7 +150,7 @@ const PACKAGES_SEED: PackageSeedSpec[] = [
 ];
 
 async function main() {
-  const defaultAdminPassword = await bcrypt.hash("ScholarifyBarokah!", 10);
+  const defaultAdminPassword = await bcrypt.hash("Scholarifysuskesbarokah313", 10);
   const defaultStudentPassword = await bcrypt.hash("siswa123", 10);
 
   // 1. Seed default Admin & Demo Accounts (Free vs Premium) + 10 Mahasiswa/Siswa Aktif

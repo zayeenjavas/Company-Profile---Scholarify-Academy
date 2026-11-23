@@ -1,3 +1,5 @@
+import blogspotRaw from "@/src/data/blogspot-news.json";
+
 export interface SanityMentor {
   _id: string;
   nama: string;
@@ -59,6 +61,24 @@ async function fetchGroq<T>(query: string): Promise<T[]> {
   return (json?.result ?? []) as T[];
 }
 
+function getBlogspotNews(): SanityNews[] {
+  return (blogspotRaw as Array<{ title: string; published: string; image: string; paragraphs: string[] }>).map(
+    (item, idx) => ({
+      _id: `blogspot-${idx + 1}`,
+      judul: item.title,
+      ringkasan: item.paragraphs[0]?.slice(0, 180) + (item.paragraphs[0]?.length > 180 ? "…" : "") || item.title,
+      tanggal: item.published,
+      gambarUrl: item.image,
+      isiLengkap: item.paragraphs.map((p, pIdx) => ({
+        _type: "block",
+        _key: `b-${idx}-${pIdx}`,
+        style: "normal",
+        children: [{ _type: "span", _key: `s-${idx}-${pIdx}`, text: p }],
+      })),
+    })
+  );
+}
+
 export async function fetchLandingCmsData(): Promise<{
   mentors: SanityMentor[];
   testimonials: SanityTestimonial[];
@@ -88,29 +108,8 @@ export async function fetchLandingCmsData(): Promise<{
     },
   ];
 
-  const fallbackNews: SanityNews[] = [
-    {
-      _id: "n1",
-      judul: "Strategi Mengatur Waktu 7 Subtest UTBK-SNBT",
-      ringkasan: "Pelajari pembagian waktu efektif agar setiap subtest terselesaikan maksimal tanpa panik.",
-      tanggal: "2026-11-10",
-      gambarUrl: "/images/program-tryout.jpg",
-    },
-    {
-      _id: "n2",
-      judul: "Bedah Pola Soal Penalaran Matematika Terbaru",
-      ringkasan: "Rangkuman tipe soal kontekstual yang paling sering muncul beserta pendekatan cepatnya.",
-      tanggal: "2026-11-05",
-      gambarUrl: "/images/program-intensif.jpg",
-    },
-    {
-      _id: "n3",
-      judul: "Tips Memilih Program Studi Sesuai Passing Grade",
-      ringkasan: "Cara membaca tren skor tryout untuk menentukan pilihan 1 dan 2 SNBT secara realistis.",
-      tanggal: "2026-10-28",
-      gambarUrl: "/images/program-konsultasi.jpg",
-    },
-  ];
+  const blogspotItems = getBlogspotNews();
+  const fallbackNews: SanityNews[] = blogspotItems;
 
   try {
     const [mentors, testimonials, news] = await Promise.all([
@@ -125,10 +124,16 @@ export async function fetchLandingCmsData(): Promise<{
       ),
     ]);
 
+    const existingTitles = new Set(news.map((n) => n.judul.toLowerCase()));
+    const mergedNews = [
+      ...blogspotItems.filter((b) => !existingTitles.has(b.judul.toLowerCase())),
+      ...news,
+    ].sort((a, b) => (b.tanggal || "").localeCompare(a.tanggal || ""));
+
     return {
       mentors: mentors.length > 0 ? mentors : fallbackMentors,
       testimonials: testimonials.length > 0 ? testimonials : fallbackTestimonials,
-      news: news.length > 0 ? news : fallbackNews,
+      news: mergedNews.length > 0 ? mergedNews : fallbackNews,
     };
   } catch {
     return {
@@ -140,6 +145,9 @@ export async function fetchLandingCmsData(): Promise<{
 }
 
 export async function fetchNewsById(id: string): Promise<SanityNews | null> {
+  if (id.startsWith("blogspot-")) {
+    return getBlogspotNews().find((b) => b._id === id) ?? null;
+  }
   try {
     const items = await fetchGroq<SanityNews>(
       `*[_type == "news" && _id == "${id.replace(/"/g, "")}"]{_id, judul, ringkasan, isiLengkap, tanggal, "gambarUrl": gambar.asset->url}`

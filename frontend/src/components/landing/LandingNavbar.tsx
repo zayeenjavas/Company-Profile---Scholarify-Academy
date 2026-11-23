@@ -28,7 +28,6 @@ const navLinks = [
   { href: "/", label: "Beranda" },
   { href: "/program", label: "Program" },
   { href: "/tentang", label: "Tentang" },
-  { href: "/tryout", label: "TryOut" },
   { href: "/tim", label: "Tim" },
   { href: "/testimoni", label: "Testimoni" },
   { href: "/berita", label: "Berita" },
@@ -93,7 +92,9 @@ export function LandingNavbar({ user }: { user: UserProfile | null }) {
                 <Link href="/tryout" className="hidden sm:inline-flex">
                   <Button
                     size="sm"
-                    className="h-9 rounded-full border border-white/30 bg-white/20 text-white hover:bg-white/30 gap-1.5 text-xs font-semibold backdrop-blur-md"
+                    className={`h-9 rounded-full bg-[#2B44FF] px-4 text-white hover:bg-[#1E34C8] gap-1.5 text-xs font-semibold shadow-sm ${
+                      pathname.startsWith("/tryout") ? "ring-2 ring-white/70" : ""
+                    }`}
                   >
                     Portal TryOut
                     <ArrowRight className="size-3.5" />
@@ -112,11 +113,16 @@ export function LandingNavbar({ user }: { user: UserProfile | null }) {
                     Login
                   </Button>
                 </Link>
-                <Link
-                  href="/tryout"
-                  className="hidden sm:inline-flex px-2 text-xs font-semibold text-white/95 transition-colors hover:text-white"
-                >
-                  TryOut
+                <Link href="/tryout" className="hidden sm:inline-flex">
+                  <Button
+                    size="sm"
+                    className={`h-9 rounded-full bg-[#2B44FF] px-4 text-white hover:bg-[#1E34C8] gap-1.5 text-xs font-semibold shadow-sm ${
+                      pathname.startsWith("/tryout") ? "ring-2 ring-white/70" : ""
+                    }`}
+                  >
+                    TryOut
+                    <ArrowRight className="size-3.5" />
+                  </Button>
                 </Link>
               </>
             )}

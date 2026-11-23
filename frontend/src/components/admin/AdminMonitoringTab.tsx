@@ -73,24 +73,40 @@ export function AdminMonitoringTab() {
   };
 
   const exportCsv = () => {
-    const headers = ["Username", "Nama", "Paket", "Subtest", "Status", "Benar", "Salah", "Kosong", "Skor"];
-    const rows = sessions.map((s) => [
-      s.user.username,
-      `"${s.user.name}"`,
-      s.tryoutPackage.slug,
-      s.subtest.code,
-      s.status,
-      s.result?.correctCount ?? 0,
-      s.result?.wrongCount ?? 0,
-      s.result?.emptyCount ?? 0,
-      s.result?.totalScore ?? 0,
-    ]);
-    const csv = [headers.join(","), ...rows.map((r) => r.join(","))].join("\n");
+    const headers = [
+      "Username",
+      "Nama",
+      "Paket",
+      "Subtest",
+      "Status",
+      "Benar",
+      "Salah",
+      "Kosong",
+      "Akurasi (%)",
+      "Skor UTBK (0-1000)",
+    ];
+    const rows = sessions.map((s) => {
+      const acc = s.result?.totalScore ?? 0;
+      const utbk = Math.round(acc * 10);
+      return [
+        s.user.username,
+        `"${s.user.name.replace(/"/g, '""')}"`,
+        `"${s.tryoutPackage.title.replace(/"/g, '""')}"`,
+        s.subtest.code,
+        s.status,
+        s.result?.correctCount ?? 0,
+        s.result?.wrongCount ?? 0,
+        s.result?.emptyCount ?? 0,
+        acc,
+        utbk,
+      ];
+    });
+    const csv = "\uFEFF" + [headers.join(","), ...rows.map((r) => r.join(","))].join("\n");
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `hasil-tryout-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.download = `laporan-tryout-scholarify-${new Date().toISOString().slice(0, 10)}.csv`;
     a.click();
     URL.revokeObjectURL(url);
   };

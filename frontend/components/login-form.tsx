@@ -1,32 +1,26 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import {
+  ArrowRight,
+  Eye,
+  EyeOff,
+  Loader2,
+  Lock,
+  User,
+} from "lucide-react";
 import { apiRequest, setStoredToken } from "@/src/api/client";
 import type { LoginResponseDto } from "@/src/api/contracts";
 import { toErrorMessage } from "@/src/api/errors";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Field,
-  FieldDescription,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { DensInputGroup } from "@/src/components/admin/dens-ui";
 
-export function LoginForm({
-  className,
-  ...props
-}: React.ComponentProps<"div">) {
+export function LoginForm() {
   const sp = useSearchParams();
   const from = sp.get("from") || "/tryout";
 
@@ -61,95 +55,120 @@ export function LoginForm({
   };
 
   return (
-    <div className={cn("flex flex-col gap-5", className)} {...props}>
-      <Card className="overflow-hidden rounded-2xl border border-border/80 bg-white/95 dark:bg-card/95 text-foreground shadow-lg backdrop-blur-md">
-        <CardHeader className="space-y-1.5 text-center pb-2">
-          <p className="text-xs font-medium text-muted-foreground">
-            Portal TryOut &amp; Admin
-          </p>
-          <CardTitle className="text-xl font-semibold tracking-tight text-foreground">
-            Selamat Datang Kembali
-          </CardTitle>
-          <CardDescription className="text-xs sm:text-sm">
-            Masuk dengan akun siswa atau admin Scholarify
-          </CardDescription>
-        </CardHeader>
+    <div>
+      <h1 className="text-[28px] font-bold tracking-[-0.03em]">Masuk</h1>
+      <p className="mt-1.5 text-sm text-[var(--muted-foreground)]">
+        Baru di Scholarify?{" "}
+        <Link href="/register" className="font-semibold text-[var(--primary)] underline-offset-4 hover:underline">
+          Daftar akun gratis
+        </Link>
+      </p>
 
-        <CardContent className="pt-4">
-          <form onSubmit={onSubmit}>
-            <FieldGroup>
-              <Field>
-                <FieldLabel htmlFor="username">Username</FieldLabel>
-                <Input
-                  id="username"
-                  type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  placeholder="username"
-                  autoComplete="username"
-                  className="min-h-[44px] rounded-xl bg-background"
-                  required
-                />
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="password">Password</FieldLabel>
-                <div className="relative">
-                  <Input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="••••••••"
-                    autoComplete="current-password"
-                    className="min-h-[44px] rounded-xl bg-background pr-10"
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword((v) => !v)}
-                    className="absolute inset-y-0 right-0 flex w-10 items-center justify-center text-muted-foreground hover:text-foreground"
-                    aria-label={showPassword ? "Sembunyikan sandi" : "Tampilkan sandi"}
-                  >
-                    {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
-                  </button>
-                </div>
-              </Field>
+      <form onSubmit={onSubmit} className="mt-7 grid gap-4">
+        <div className="grid gap-2">
+          <Label htmlFor="username">Username</Label>
+          <DensInputGroup start={<User />} className="h-11 rounded-xl">
+            <input
+              id="username"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="mis. nadia_putri"
+              autoComplete="username"
+              required
+              className="w-full bg-transparent text-sm text-[var(--foreground)] placeholder:text-[var(--muted-foreground)] focus:outline-none"
+            />
+          </DensInputGroup>
+        </div>
 
-              {err && (
-                <div className="rounded-xl border border-destructive/30 bg-destructive/10 px-3 py-2 text-xs text-destructive">
-                  {err}
-                </div>
-              )}
+        <div className="grid gap-2">
+          <div className="flex items-center justify-between">
+            <Label htmlFor="password">Password</Label>
+            <a
+              href="https://wa.me/6285156540075?text=Halo%20Admin%20Scholarify,%20saya%20lupa%20password%20akun%20TryOut"
+              target="_blank"
+              rel="noreferrer"
+              className="text-[13px] font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
+            >
+              Lupa password?
+            </a>
+          </div>
+          <DensInputGroup
+            start={<Lock />}
+            className="h-11 rounded-xl"
+            end={
+              <button
+                type="button"
+                onClick={() => setShowPassword((v) => !v)}
+                aria-label={showPassword ? "Sembunyikan sandi" : "Tampilkan sandi"}
+                className="grid size-7 place-content-center rounded-[6px] text-[var(--muted-foreground)] hover:text-[var(--foreground)] cursor-pointer"
+              >
+                {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+              </button>
+            }
+          >
+            <input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+              autoComplete="current-password"
+              required
+              className="w-full bg-transparent text-sm text-[var(--foreground)] placeholder:text-[var(--muted-foreground)] focus:outline-none"
+            />
+          </DensInputGroup>
+        </div>
 
-              <Field>
-                <Button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full min-h-[44px] rounded-xl bg-[#1E34C8] text-white hover:bg-[#17289E] font-medium"
-                >
-                  {loading ? (
-                    <>
-                      <Loader2 className="mr-2 size-4 animate-spin" />
-                      Memproses...
-                    </>
-                  ) : (
-                    "Masuk"
-                  )}
-                </Button>
-                <FieldDescription className="text-center text-xs">
-                  Belum punya akun?{" "}
-                  <a href="/register" className="font-semibold text-[#1E34C8] hover:underline">
-                    Daftar gratis
-                  </a>
-                </FieldDescription>
-              </Field>
-            </FieldGroup>
-          </form>
-        </CardContent>
-      </Card>
-      <FieldDescription className="px-6 text-center text-xs text-white/70">
-        Platform Simulasi TryOut UTBK &amp; Belajar Terpadu Scholarify.
-      </FieldDescription>
+        <div className="flex items-center gap-2.5">
+          <Checkbox id="remember" defaultChecked />
+          <Label htmlFor="remember" className="text-xs font-medium text-[var(--muted-foreground)]">
+            Tetap masuk selama sesi aktif (Better Auth)
+          </Label>
+        </div>
+
+        {err && (
+          <div className="rounded-xl border border-[var(--destructive)]/30 bg-[var(--destructive)]/10 px-3 py-2 text-xs text-[var(--destructive)]">
+            {err}
+          </div>
+        )}
+
+        <Button
+          type="submit"
+          size="lg"
+          disabled={loading}
+          className="mt-1 h-11 w-full rounded-xl bg-[var(--brand)] text-white hover:bg-[var(--primary)] font-semibold"
+        >
+          {loading ? (
+            <>
+              <Loader2 className="mr-2 size-4 animate-spin" />
+              Memproses...
+            </>
+          ) : (
+            <>
+              Masuk
+              <ArrowRight className="ml-1.5 size-4" />
+            </>
+          )}
+        </Button>
+      </form>
+
+      <div className="my-7 flex items-center gap-3 text-xs text-[var(--muted-foreground)]">
+        <Separator className="flex-1" /> akses cepat <Separator className="flex-1" />
+      </div>
+
+      <div className="grid grid-cols-2 gap-2">
+        <Link href="/register">
+          <Button variant="outline" className="w-full rounded-xl text-xs">
+            Daftar Siswa
+          </Button>
+        </Link>
+        <Link href="/tryout">
+          <Button variant="outline" className="w-full rounded-xl text-xs">
+            Lihat Paket
+          </Button>
+        </Link>
+      </div>
     </div>
   );
 }

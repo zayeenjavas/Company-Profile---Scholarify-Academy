@@ -1,7 +1,5 @@
 import { ExamSessionStatus, PackageStatus, PrismaClient, SubscriptionPlan, SubscriptionStatus } from "@prisma/client";
 import bcrypt from "bcryptjs";
-import fs from "fs";
-import path from "path";
 import { BANK_SOAL_BY_SUBTEST } from "./seed-bank-soal";
 
 const prisma = new PrismaClient();
@@ -284,59 +282,7 @@ async function main() {
     packageBySlug.set(spec.slug, { id: saved.id, spec });
   }
 
-  // 4. Import legacy quiz_data_utf8.json ke batch-1 jika batch-1 masih kosong
-  const batch1 = packageBySlug.get("batch-1")!;
-  const batch1QuestionCount = await prisma.question.count({ where: { packageId: batch1.id } });
-  const legacyQuizPath = path.resolve(process.cwd(), "..", "backend", "quiz_data_utf8.json");
-  if (batch1QuestionCount === 0 && fs.existsSync(legacyQuizPath)) {
-    try {
-      const raw = JSON.parse(fs.readFileSync(legacyQuizPath, "utf-8")) as Array<{
-        model: string;
-        pk: number;
-        fields: Record<string, unknown>;
-      }>;
-      const legacySubtestPkToCode = new Map<number, string>();
-      for (const item of raw) {
-        if (item.model === "quiz.subtest") {
-          legacySubtestPkToCode.set(item.pk, String(item.fields.code).toUpperCase());
-        }
-      }
-      let orderCounter = 1;
-      for (const item of raw) {
-        if (item.model === "quiz.soal") {
-          const code = legacySubtestPkToCode.get(Number(item.fields.subtest)) || "PU";
-          const subtestId = subtestByCode.get(code);
-          if (!subtestId) continue;
-          const correct = String(item.fields.correct_answer || "A").toUpperCase();
-          const imageUrl = item.fields.soal_image ? `/media/${item.fields.soal_image}` : null;
-          await prisma.question.create({
-            data: {
-              packageId: batch1.id,
-              subtestId,
-              orderNo: orderCounter++,
-              stemContent: String(item.fields.soal_text || ""),
-              imageUrl,
-              questionType: "PG",
-              weight: 1,
-              choices: {
-                create: [
-                  { label: "A", content: String(item.fields.option_a || "-"), isCorrect: correct === "A" },
-                  { label: "B", content: String(item.fields.option_b || "-"), isCorrect: correct === "B" },
-                  { label: "C", content: String(item.fields.option_c || "-"), isCorrect: correct === "C" },
-                  { label: "D", content: String(item.fields.option_d || "-"), isCorrect: correct === "D" },
-                  { label: "E", content: String(item.fields.option_e || "-"), isCorrect: correct === "E" },
-                ],
-              },
-            },
-          });
-        }
-      }
-    } catch (err) {
-      console.warn("Legacy import skipped due to error:", err);
-    }
-  }
-
-  // 5. Generate Bank Soal lengkap untuk setiap paket yang belum memiliki soal
+  // 4. Generate Bank Soal lengkap untuk setiap paket yang belum memiliki soal
   let createdQuestionsCount = 0;
   for (const [slug, { id: packageId, spec }] of packageBySlug.entries()) {
     const existingCount = await prisma.question.count({ where: { packageId } });

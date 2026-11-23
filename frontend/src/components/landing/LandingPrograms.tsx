@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 
 const programs = [
   {
@@ -9,7 +9,7 @@ const programs = [
     title: "TryOut UTBK Online",
     subtitle: "Simulasi 7 Subtest + Analitik Skor",
     image: "/images/ig-models/cutout-male-pointing.png",
-    backdrop: "bg-[#8FD3FA]",
+    backdrop: "bg-[#9BD4FA]",
   },
   {
     id: "intensif",
@@ -38,19 +38,63 @@ export function LandingPrograms() {
   const [active, setActive] = useState(programs[0]);
 
   return (
-    <section id="program" className="bg-[#1E34C8] text-white pt-20 pb-16 sm:pt-28 sm:pb-24">
-      <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-8 px-4 sm:px-6 lg:grid-cols-12">
-        <div className="space-y-6 lg:col-span-7">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-white/75">
-              Program Unggulan
-            </p>
-            <h2 className="mt-1 text-2xl font-bold tracking-tight sm:text-3xl">
-              Pilih Program Belajar Sesuai Targetmu
+    <section
+      id="program"
+      className="relative overflow-hidden bg-[#0E2492] text-white py-16 sm:py-24"
+    >
+      {/* Subtle Diagonal & Dot Texture (ala referensi) */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 opacity-20"
+        style={{
+          backgroundImage:
+            "radial-gradient(rgba(255,255,255,0.28) 1px, transparent 1px)",
+          backgroundSize: "18px 18px",
+        }}
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-24 -top-24 h-[140%] w-1/2 -rotate-12 bg-white/[0.04]"
+      />
+
+      <div className="relative z-10 mx-auto grid max-w-6xl grid-cols-1 items-center gap-10 px-4 sm:px-6 lg:grid-cols-12">
+        {/* Kiri: Header Editorial + Daftar Program */}
+        <div className="space-y-7 lg:col-span-6">
+          <div className="space-y-2">
+            <div className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-widest text-white/85">
+              <span className="inline-flex h-2.5 w-2.5 rounded-full bg-amber-400" />
+              PROGRAM UNGGULAN
+            </div>
+            <h2 className="text-2xl font-extrabold tracking-tight sm:text-4xl leading-[1.15]">
+              Pilih Program Belajar
+              <span className="block">
+                Sesuai Target{" "}
+                <span className="relative inline-block">
+                  <em
+                    className="italic font-normal text-[#9BD4FA]"
+                    style={{ fontFamily: "'Instrument Serif', Georgia, serif" }}
+                  >
+                    Impianmu
+                  </em>
+                  <svg
+                    viewBox="0 0 150 10"
+                    fill="none"
+                    className="pointer-events-none absolute -bottom-1 left-0 w-full h-2 text-white/70"
+                    preserveAspectRatio="none"
+                  >
+                    <path
+                      d="M2 8C48 2 102 2 148 8"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </span>
+              </span>
             </h2>
           </div>
 
-          <div className="divide-y divide-white/15 border-y border-white/15">
+          <div className="divide-y divide-white/15 border-b border-white/15">
             {programs.map((p) => {
               const isSelected = p.id === active.id;
               return (
@@ -58,22 +102,22 @@ export function LandingPrograms() {
                   key={p.id}
                   type="button"
                   onClick={() => setActive(p)}
-                  className={`flex w-full items-center justify-between py-4 text-left transition-colors ${
+                  className={`group flex w-full items-center justify-between py-4 text-left transition-colors ${
                     isSelected ? "text-white" : "text-white/70 hover:text-white"
                   }`}
                 >
                   <div>
                     <p className="text-base font-semibold sm:text-lg">{p.title}</p>
-                    <p className="text-xs text-white/70">{p.subtitle}</p>
+                    <p className="text-xs italic text-white/70">{p.subtitle}</p>
                   </div>
                   <span
-                    className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border transition-colors ${
+                    className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border transition-all ${
                       isSelected
-                        ? "border-white bg-white text-[#1E34C8]"
-                        : "border-white/30 text-white"
+                        ? "border-white bg-white text-[#0E2492]"
+                        : "border-white/30 text-white group-hover:border-white/60"
                     }`}
                   >
-                    <ArrowRight className="size-4" />
+                    <ArrowUpRight className="size-4" />
                   </span>
                 </button>
               );
@@ -81,15 +125,31 @@ export function LandingPrograms() {
           </div>
         </div>
 
-        <div className="lg:col-span-5">
+        {/* Kanan: Notched Asymmetric Cutout Frame + Vertical PTN Strip */}
+        <div className="flex items-center justify-center gap-5 lg:col-span-6">
           <div
-            className={`relative flex h-80 sm:h-96 items-end justify-center overflow-hidden rounded-[2rem] ${active.backdrop} px-6 pt-6 shadow-xl transition-colors duration-300`}
+            className={`relative flex h-[340px] sm:h-[400px] w-full max-w-[420px] items-end justify-center overflow-hidden rounded-[2rem] ${active.backdrop} px-6 pt-8 shadow-2xl transition-colors duration-300`}
           >
+            {/* Top-right organic notch cutout (ala referensi) */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute right-0 top-0 z-20 h-16 w-16 rounded-bl-[2rem] bg-[#0E2492]"
+            />
+
             <img
               src={active.image}
               alt={active.title}
-              className="max-h-full w-auto object-contain object-bottom drop-shadow-lg transition-all duration-300"
+              className="relative z-10 max-h-full w-auto object-contain object-bottom drop-shadow-xl transition-all duration-300"
             />
+          </div>
+
+          {/* Vertical Trust Strip (desktop only, ala referensi) */}
+          <div className="hidden xl:flex flex-col items-center justify-between gap-7 py-4 text-xs font-bold tracking-widest text-white/75 select-none">
+            {["UGM", "ITB", "UI", "UNAIR", "UNDIP"].map((ptn) => (
+              <span key={ptn} className="-rotate-90 whitespace-nowrap">
+                {ptn}
+              </span>
+            ))}
           </div>
         </div>
       </div>

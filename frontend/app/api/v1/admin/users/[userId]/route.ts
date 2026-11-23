@@ -76,6 +76,13 @@ export async function PATCH(
       include: { subscription: true },
     });
 
+    if (passwordHash !== undefined) {
+      await prisma.account.updateMany({
+        where: { userId, providerId: "credential" },
+        data: { password: passwordHash },
+      });
+    }
+
     return NextResponse.json({ user: serializeUserDto(updated) });
   } catch (error) {
     console.error("[PATCH /api/v1/admin/users/:id] Error:", error);

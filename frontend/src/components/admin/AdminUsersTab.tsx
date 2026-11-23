@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Plus, Trash2, Crown, UserCheck, UserX, Upload, Ticket } from "lucide-react";
+import { Plus, Trash2, Crown, UserCheck, UserX, Upload, Ticket, Pencil, X } from "lucide-react";
 import { apiRequest } from "@/src/api/client";
 import type { UserDto } from "@/src/api/contracts";
 import { Button } from "@/components/ui/button";
@@ -63,6 +63,39 @@ export function AdminUsersTab() {
 
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [bulkRunning, setBulkRunning] = useState(false);
+
+  const [editingUser, setEditingUser] = useState<UserDto | null>(null);
+  const [editName, setEditName] = useState("");
+  const [editPassword, setEditPassword] = useState("");
+  const [editSaving, setEditSaving] = useState(false);
+
+  const startEditUser = (u: UserDto) => {
+    setEditingUser(u);
+    setEditName(u.name);
+    setEditPassword("");
+  };
+
+  const handleSaveEdit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingUser) return;
+    setEditSaving(true);
+    try {
+      await apiRequest(`/admin/users/${editingUser.id}`, {
+        method: "PATCH",
+        body: JSON.stringify({
+          name: editName.trim(),
+          ...(editPassword.trim() ? { password: editPassword.trim() } : {}),
+        }),
+      });
+      setEditingUser(null);
+      setEditPassword("");
+      await load();
+    } catch (err: any) {
+      alert(err.message || "Gagal memperbarui pengguna");
+    } finally {
+      setEditSaving(false);
+    }
+  };
 
   const load = async () => {
     setLoading(true);
@@ -392,6 +425,54 @@ export function AdminUsersTab() {
         </Card>
       )}
 
+      {editingUser && (
+        <Card className="border-[var(--brand)]/40">
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle className="text-base">
+              Edit Pengguna (@{editingUser.username})
+            </CardTitle>
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={() => setEditingUser(null)}
+              title="Tutup"
+            >
+              <X className="size-4" />
+            </Button>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSaveEdit} className="grid grid-cols-1 gap-3 md:grid-cols-2">
+              <div className="space-y-1">
+                <Label>Nama Lengkap</Label>
+                <Input
+                  value={editName}
+                  onChange={(e) => setEditName(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="space-y-1">
+                <Label>Password Baru (kosongkan jika tidak diubah)</Label>
+                <Input
+                  type="password"
+                  value={editPassword}
+                  onChange={(e) => setEditPassword(e.target.value)}
+                  placeholder="Minimal 6 karakter"
+                  minLength={6}
+                />
+              </div>
+              <div className="md:col-span-2 flex justify-end gap-2">
+                <Button type="button" variant="outline" onClick={() => setEditingUser(null)}>
+                  Batal
+                </Button>
+                <Button type="submit" disabled={editSaving}>
+                  {editSaving ? "Menyimpan..." : "Simpan Perubahan"}
+                </Button>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
+      )}
+
       {selectedIds.length > 0 && (
         <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[var(--brand)]/40 bg-[var(--card)] px-4 py-3 shadow-sm">
           <div className="flex items-center gap-2.5">
@@ -542,6 +623,14 @@ export function AdminUsersTab() {
                             {u.subscription.is_active ? "Cabut Premium" : "Aktifkan 90 Hari"}
                           </Button>
                         )}
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          onClick={() => startEditUser(u)}
+                          title="Edit Nama / Password"
+                        >
+                          <Pencil className="size-4" />
+                        </Button>
                         <Button
                           size="sm"
                           variant="ghost"

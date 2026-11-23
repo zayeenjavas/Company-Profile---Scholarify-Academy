@@ -29,7 +29,7 @@ export async function POST(req: Request) {
       include: { subscription: true },
     });
 
-    if (!user) {
+    if (!user || !user.passwordHash) {
       return NextResponse.json(
         { error: "Username atau password salah", code: "INVALID_CREDENTIALS" },
         { status: 401 }

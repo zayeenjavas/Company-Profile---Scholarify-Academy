@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
 import Lenis from "lenis";
 import { motion } from "motion/react";
-import { Crown, GraduationCap } from "lucide-react";
+import { Crown, GraduationCap, Plus } from "lucide-react";
 import type { SanityMentor } from "@/src/api/sanity";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
@@ -179,20 +179,36 @@ export function LandingMentors({ mentors }: { mentors: SanityMentor[] }) {
       <div className="mx-auto max-w-6xl space-y-8 px-4 sm:px-6">
         {/* Header + Filter Pill (Tanpa Button Geser) */}
         <div className="flex flex-wrap items-end justify-between gap-4">
-          <div className="space-y-2">
-            <p className="text-[11px] font-bold uppercase tracking-widest text-[#2B44FF]">
-              Tim Kami
-            </p>
-            <h2 className="text-2xl font-bold tracking-tight sm:text-3xl leading-snug">
-              Kenali Tim Pengajar{" "}
-              <span className="block sm:inline">
+          <div className="space-y-1.5">
+            <div className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-widest text-slate-600 dark:text-muted-foreground">
+              <span className="inline-flex h-2.5 w-2.5 rounded-full bg-[#4F6BFF]" />
+              TIM KAMI
+            </div>
+            <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-foreground sm:text-4xl leading-[1.15]">
+              Kenali Tim Pengajar
+              <span className="block">
                 Berdedikasi,{" "}
-                <em
-                  className="italic text-[#2B44FF] underline decoration-[#FF5A4E]/60 decoration-2 underline-offset-4"
-                  style={{ fontFamily: "'Instrument Serif', Georgia, serif" }}
-                >
-                  Mentor Terbaik
-                </em>
+                <span className="relative inline-block">
+                  <em
+                    className="italic font-normal text-[#4F6BFF]"
+                    style={{ fontFamily: "'Instrument Serif', Georgia, serif" }}
+                  >
+                    Mentor Terbaik
+                  </em>
+                  <svg
+                    viewBox="0 0 180 12"
+                    fill="none"
+                    className="pointer-events-none absolute -bottom-1 left-0 w-full h-2.5 text-[#FF6B4A]"
+                    preserveAspectRatio="none"
+                  >
+                    <path
+                      d="M2 9.5C55 2.5 125 2.5 178 9.5"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </span>
               </span>
             </h2>
           </div>
@@ -247,12 +263,12 @@ export function LandingMentors({ mentors }: { mentors: SanityMentor[] }) {
                   }`}
                 >
                   <Card
-                    className={`group h-full overflow-hidden rounded-2xl border bg-card shadow-sm transition-shadow hover:shadow-md ${
-                      founder ? "ring-2 ring-[#2B44FF] shadow-md" : ""
+                    className={`group h-full overflow-hidden rounded-2xl border border-slate-200/80 dark:border-border bg-white dark:bg-card shadow-[0_6px_24px_rgba(15,23,42,0.05)] transition-shadow hover:shadow-[0_12px_32px_rgba(43,68,255,0.12)] ${
+                      founder ? "ring-2 ring-[#4F6BFF]/80" : ""
                     }`}
                   >
                     <div
-                      className={`relative aspect-[3/4] w-full overflow-hidden flex items-center justify-center ${
+                      className={`relative aspect-[4/4.3] w-full overflow-hidden flex items-center justify-center ${
                         cardBackdrops[idx % cardBackdrops.length]
                       }`}
                     >
@@ -268,7 +284,7 @@ export function LandingMentors({ mentors }: { mentors: SanityMentor[] }) {
                           <img
                             src={src}
                             alt={m.nama}
-                            className="h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-[1.03]"
+                            className="h-full w-full object-cover object-top transition-transform duration-300 group-hover:scale-[1.03]"
                           />
                         ) : (
                           <>
@@ -290,26 +306,47 @@ export function LandingMentors({ mentors }: { mentors: SanityMentor[] }) {
                           {m.nama.slice(0, 2).toUpperCase()}
                         </div>
                       )}
+
+                      {/* Smooth Bell-Curve Wave Overlay (ala referensi) */}
+                      <svg
+                        viewBox="0 0 400 48"
+                        preserveAspectRatio="none"
+                        className="pointer-events-none absolute -bottom-px left-0 z-10 h-9 w-full text-white dark:text-card fill-current"
+                      >
+                        <path d="M0,48 L0,38 Q120,38 200,8 Q280,38 400,38 L400,48 Z" />
+                      </svg>
                     </div>
 
-                    <div className="relative border-t bg-card px-4 pb-5 pt-7 text-center">
-                      <div className="absolute left-1/2 -top-4 flex h-8 w-8 -translate-x-1/2 items-center justify-center rounded-full border-2 border-card bg-[#2B44FF] text-white shadow-sm overflow-hidden">
+                    <div
+                      className="relative bg-white dark:bg-card px-4 pb-5 pt-5 text-center"
+                      style={{
+                        backgroundImage:
+                          "radial-gradient(rgba(148, 163, 184, 0.22) 1px, transparent 1px)",
+                        backgroundSize: "10px 10px",
+                      }}
+                    >
+                      <div className="absolute left-1/2 -top-7 z-20 flex h-10 w-10 -translate-x-1/2 items-center justify-center rounded-full border-[3px] border-white dark:border-card bg-[#4F6BFF] text-white shadow-md overflow-hidden">
                         {m.logoKampusUrl ? (
                           <img
                             src={m.logoKampusUrl}
                             alt={m.kampus}
-                            className="h-5 w-5 rounded-full bg-white object-contain p-0.5"
+                            className="h-6 w-6 rounded-full bg-white object-contain p-0.5"
                           />
                         ) : (
-                          <GraduationCap className="size-4" />
+                          <Plus className="size-4 stroke-[2.5]" />
                         )}
                       </div>
 
-                      <h3 className="truncate text-sm font-bold text-foreground">{m.nama}</h3>
-                      <p className="mt-0.5 truncate text-xs text-muted-foreground">{m.jabatan}</p>
-                      <Badge variant="secondary" className="mt-2 text-[11px] font-medium">
+                      <h3 className="truncate text-[15px] font-bold text-slate-900 dark:text-foreground">
+                        {m.nama}
+                      </h3>
+                      <p className="mt-0.5 truncate text-xs text-slate-500 dark:text-muted-foreground">
+                        {m.jabatan}
+                      </p>
+                      <p className="mt-1 inline-flex items-center gap-1 rounded-full bg-slate-100 dark:bg-muted px-2 py-0.5 text-[10px] font-medium text-slate-600 dark:text-muted-foreground">
+                        <GraduationCap className="size-3 text-[#4F6BFF]" />
                         {m.kampus}
-                      </Badge>
+                      </p>
                     </div>
                   </Card>
                 </motion.div>

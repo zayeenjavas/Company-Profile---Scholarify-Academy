@@ -19,7 +19,7 @@ export function LandingHero({
   return (
     <section
       id="beranda"
-      className="relative flex min-h-[82vh] sm:min-h-[90vh] flex-col justify-between overflow-hidden bg-[#061124] pt-8 lg:pt-24 text-white"
+      className="relative flex min-h-screen min-h-[100dvh] flex-col justify-between overflow-hidden bg-[#061124] pt-8 lg:pt-24 text-white"
     >
       {/* Full-bleed Cinematic Looping Video Background (preserved from scholarify.id) */}
       <video

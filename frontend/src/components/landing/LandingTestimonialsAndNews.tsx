@@ -129,7 +129,7 @@ export function LandingTestimonialsAndNews({
                           alt={current.nama}
                           className={
                             current.nama.toLowerCase().includes("aurelia")
-                              ? "h-full w-full object-cover object-bottom origin-[42%_88%] scale-[2.3]"
+                              ? "h-full w-full object-cover object-[42%_46%] origin-[42%_46%] scale-[2.2]"
                               : "h-full w-full object-cover object-center"
                           }
                         />

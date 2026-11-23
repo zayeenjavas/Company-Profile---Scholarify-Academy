@@ -28,30 +28,77 @@ export function LandingTestimonialsAndNews({
 
   return (
     <>
-      {/* Banner CTA Coral — disembunyikan jika user sudah berlangganan */}
+      {/* Banner CTA Coral ala Referensi — disembunyikan jika user sudah berlangganan */}
       {!isSubscribed && (
-        <section className="mx-auto max-w-6xl px-4 pb-14 sm:px-6">
-          <div className="relative overflow-hidden rounded-3xl bg-[#FF4D3D] p-6 text-white shadow-lg sm:p-10">
-            <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
-              <div className="max-w-xl space-y-2">
-                <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
-                  Siap Buka Semua Paket TryOut Premium?
-                </h2>
-                <p className="text-sm text-white/90">
-                  Dapatkan akses penuh ke seluruh batch simulasi UTBK, analitik performa, dan pembahasan lengkap tiap nomor.
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-3">
-                <Link href="/login">
-                  <Button
-                    size="lg"
-                    className="min-h-[44px] rounded-full bg-white text-[#FF4D3D] hover:bg-white/90 font-semibold gap-2"
-                  >
-                    Masuk / Aktivasi
-                    <Send className="size-4" />
-                  </Button>
-                </Link>
-              </div>
+        <section className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+          <div className="relative overflow-hidden rounded-3xl bg-[#FF4D3D] px-6 py-10 text-center text-white shadow-lg sm:px-12 sm:py-12">
+            {/* Subtle Left Decorative Starburst */}
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 80 80"
+              fill="none"
+              className="pointer-events-none hidden md:block absolute left-8 bottom-6 h-16 w-16 text-white/20"
+            >
+              <path
+                d="M40 6L46 34L74 40L46 46L40 74L34 46L6 40L34 34L40 6Z"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinejoin="round"
+              />
+            </svg>
+
+            {/* Right Hand-drawn Paper Plane Doodle (ala referensi) */}
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 64 64"
+              fill="none"
+              className="pointer-events-none hidden sm:block absolute right-8 bottom-7 h-14 w-14 text-white/30"
+            >
+              <path
+                d="M56 10L8 29L25 36L32 53L56 10Z"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M56 10L25 36"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+              />
+            </svg>
+
+            <div className="relative z-10 mx-auto max-w-2xl space-y-4">
+              <h2
+                className="text-3xl font-extrabold tracking-tight sm:text-5xl text-transparent"
+                style={{ WebkitTextStroke: "1.5px rgba(255,255,255,0.92)" }}
+              >
+                Buka Semua TryOut
+              </h2>
+              <p className="mx-auto max-w-md text-xs leading-relaxed text-white/90 sm:text-sm">
+                Akses penuh seluruh batch simulasi UTBK-SNBT, analitik skor akurat, dan pembahasan lengkap tiap nomor.
+              </p>
+
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  window.location.href = "/login";
+                }}
+                className="mx-auto mt-6 flex w-full max-w-md items-center gap-2 rounded-full bg-white p-1.5 pl-4 shadow-md"
+              >
+                <input
+                  type="email"
+                  placeholder="Masukkan email kamu..."
+                  className="min-w-0 flex-1 bg-transparent text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none"
+                />
+                <Button
+                  type="submit"
+                  size="sm"
+                  className="min-h-[38px] shrink-0 rounded-full bg-[#4F6BFF] px-5 text-xs font-semibold text-white hover:bg-[#3B56E6]"
+                >
+                  &raquo; Mulai Sekarang
+                </Button>
+              </form>
             </div>
           </div>
         </section>

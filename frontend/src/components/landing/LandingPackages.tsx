@@ -14,6 +14,13 @@ import {
 import type { TryoutPackage } from "@/src/types/domain";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import { TryoutAnimatedCover } from "@/src/components/common/TryoutAnimatedCover";
 
 const PACKAGE_COVERS = [
@@ -112,24 +119,30 @@ export function LandingPackages({
             </CardContent>
           </Card>
         ) : (
-          <>
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-              {visible.map((pkg, idx) => {
-                const cover = PACKAGE_COVERS[(safePage * perPage + idx) % PACKAGE_COVERS.length];
-                return (
-                  <div
-                    key={pkg.id}
-                    className="group flex flex-col justify-between rounded-2xl border border-slate-200/80 dark:border-border bg-white dark:bg-card p-3.5 shadow-[0_8px_28px_rgba(15,23,42,0.05)] transition-shadow hover:shadow-[0_14px_34px_rgba(79,107,255,0.12)]"
-                  >
-                    <div>
-                      {/* Animated TryOut Cover */}
-                      <div className="overflow-hidden rounded-xl">
-                        <TryoutAnimatedCover
-                          index={safePage * perPage + idx}
-                          tier={pkg.tier}
-                          questionCount={pkg.questionCount}
-                        />
-                      </div>
+          <div className="px-2 sm:px-6">
+            <Carousel
+              opts={{
+                align: "start",
+              }}
+              className="w-full"
+            >
+              <CarouselContent>
+                {filtered.map((pkg, idx) => {
+                  return (
+                    <CarouselItem
+                      key={pkg.id}
+                      className="basis-full sm:basis-1/2 lg:basis-1/3"
+                    >
+                      <div className="group flex h-full flex-col justify-between rounded-2xl border border-slate-200/80 dark:border-border bg-white dark:bg-card p-3.5 shadow-[0_8px_28px_rgba(15,23,42,0.05)] transition-shadow hover:shadow-[0_14px_34px_rgba(79,107,255,0.12)]">
+                        <div>
+                          {/* Animated TryOut Cover */}
+                          <div className="overflow-hidden rounded-xl">
+                            <TryoutAnimatedCover
+                              index={idx}
+                              tier={pkg.tier}
+                              questionCount={pkg.questionCount}
+                            />
+                          </div>
 
                       {/* Meta Row */}
                       <div className="mt-3.5 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500 dark:text-muted-foreground tabular-nums">
@@ -209,50 +222,14 @@ export function LandingPackages({
                       </span>
                     </div>
                   </div>
-                );
-              })}
-            </div>
-
-            {/* Bottom Controls: Coral Active Dot + Right Circular Arrows (ala referensi) */}
-            {totalPages > 1 && (
-              <div className="flex items-center justify-between pt-2">
-                <div className="flex items-center gap-2">
-                  {Array.from({ length: totalPages }).map((_, idx) => (
-                    <button
-                      key={idx}
-                      type="button"
-                      onClick={() => setPage(idx)}
-                      aria-label={`Halaman paket ${idx + 1}`}
-                      className={`h-3 w-3 rounded-full transition-all ${
-                        idx === safePage
-                          ? "scale-110 bg-[#FF6B4A]"
-                          : "bg-white dark:bg-card hover:bg-[#5B6CFF]/40"
-                      }`}
-                    />
-                  ))}
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setPage((p) => (p - 1 + totalPages) % totalPages)}
-                    aria-label="Paket sebelumnya"
-                    className="flex h-9 w-9 items-center justify-center rounded-full bg-white dark:bg-card text-slate-700 dark:text-foreground shadow-sm transition hover:bg-[#5B6CFF] hover:text-white"
-                  >
-                    <ArrowLeft className="size-4" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setPage((p) => (p + 1) % totalPages)}
-                    aria-label="Paket berikutnya"
-                    className="flex h-9 w-9 items-center justify-center rounded-full bg-white dark:bg-card text-slate-700 dark:text-foreground shadow-sm transition hover:bg-[#5B6CFF] hover:text-white"
-                  >
-                    <ArrowRight className="size-4" />
-                  </button>
-                </div>
-              </div>
-            )}
-          </>
+                    </CarouselItem>
+                  );
+                })}
+              </CarouselContent>
+              <CarouselPrevious />
+              <CarouselNext />
+            </Carousel>
+          </div>
         )}
       </div>
     </section>

@@ -41,6 +41,11 @@ export function LandingNavbar({ user }: { user: UserProfile | null }) {
 
   return (
     <>
+      {/* Top Right Floating ThemeToggle (PWA Mobile Only) */}
+      <div className="fixed top-4 right-4 z-50 lg:hidden [&_button]:h-10 [&_button]:w-10 [&_button]:rounded-full [&_button]:border-white/25 [&_button]:bg-slate-950/60 [&_button]:text-white [&_button]:shadow-lg [&_button]:backdrop-blur-xl [&_button:hover]:bg-slate-950/80">
+        <ThemeToggle />
+      </div>
+
       {/* Top Floating Glass Pill Navbar (Desktop Only) */}
       <div className="hidden lg:block fixed top-4 left-0 right-0 z-50 px-4">
         <header className="mx-auto flex h-12 max-w-6xl items-center justify-between gap-3 rounded-full border border-white/20 bg-slate-950/45 px-4 text-white shadow-lg backdrop-blur-xl sm:h-14 sm:px-6">

@@ -23,11 +23,13 @@ export function LandingContactFooter() {
       <section id="kontak" className="bg-[#EEF1FF] dark:bg-muted/30 py-14 sm:py-16">
         <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-8 px-4 sm:px-6 lg:grid-cols-12">
           <div className="lg:col-span-5">
-            <img
-              src="/images/program-konsultasi.jpg"
-              alt="Hubungi Scholarify"
-              className="h-80 w-full rounded-3xl object-cover border shadow-md"
-            />
+            <div className="relative flex h-80 items-end justify-center overflow-hidden rounded-3xl border bg-[#DBEAFE] px-6 pt-6 shadow-md">
+              <img
+                src="/images/ig-models/cutout-male-pointing.png"
+                alt="Hubungi Scholarify"
+                className="max-h-full w-auto object-contain object-bottom drop-shadow-md"
+              />
+            </div>
           </div>
 
           <div className="lg:col-span-7">

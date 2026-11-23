@@ -32,20 +32,12 @@ export function LandingTestimonialsAndNews({
       {!isSubscribed && (
         <section className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
           <div className="relative overflow-hidden rounded-3xl bg-[#FF4D3D] px-6 py-10 text-center text-white shadow-lg sm:px-12 sm:py-12">
-            {/* Subtle Left Decorative Starburst */}
-            <svg
-              aria-hidden="true"
-              viewBox="0 0 80 80"
-              fill="none"
-              className="pointer-events-none hidden md:block absolute left-8 bottom-6 h-16 w-16 text-white/20"
-            >
-              <path
-                d="M40 6L46 34L74 40L46 46L40 74L34 46L6 40L34 34L40 6Z"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinejoin="round"
-              />
-            </svg>
+            {/* Left Student Model Cutout (ala referensi) */}
+            <img
+              src="/images/ig-models/cutout-hijab-blue.png"
+              alt="Siswa Scholarify"
+              className="pointer-events-none hidden md:block absolute left-6 bottom-0 h-44 w-auto object-contain object-bottom drop-shadow-md"
+            />
 
             {/* Right Hand-drawn Paper Plane Doodle (ala referensi) */}
             <svg

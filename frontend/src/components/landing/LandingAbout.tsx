@@ -10,14 +10,16 @@ export function LandingAbout() {
   return (
     <section id="tentang" className="bg-background py-14 sm:py-16">
       <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-10 px-4 sm:px-6 lg:grid-cols-12">
-        {/* Kiri: Kolase Gambar + Badge */}
+        {/* Kiri: Kolase Model IG Cutout + Badge */}
         <div className="grid grid-cols-2 gap-4 lg:col-span-5">
           <div className="space-y-4">
-            <img
-              src="/images/program-intensif.jpg"
-              alt="Belajar Intensif Scholarify"
-              className="h-48 w-full rounded-2xl object-cover border"
-            />
+            <div className="relative flex h-52 items-end justify-center overflow-hidden rounded-2xl border bg-[#DBEAFE] px-2 pt-3">
+              <img
+                src="/images/ig-models/cutout-hijab-beige.png"
+                alt="Siswa Scholarify"
+                className="max-h-full w-auto object-contain object-bottom"
+              />
+            </div>
             <Card className="p-4 text-center">
               <p className="text-2xl font-bold text-[#2B44FF] tabular-nums">140+</p>
               <p className="text-xs text-muted-foreground">Bank Soal Terkurasi</p>
@@ -28,11 +30,13 @@ export function LandingAbout() {
               <p className="text-2xl font-bold tabular-nums">7 Subtest</p>
               <p className="text-xs text-white/80">Sesuai Standar SNBT</p>
             </Card>
-            <img
-              src="/images/program-regular.jpg"
-              alt="Diskusi Mentor Scholarify"
-              className="h-48 w-full rounded-2xl object-cover border"
-            />
+            <div className="relative flex h-52 items-end justify-center overflow-hidden rounded-2xl border bg-[#FDE68A] px-2 pt-3">
+              <img
+                src="/images/ig-models/cutout-male-thinking.png"
+                alt="Persiapan UTBK Scholarify"
+                className="max-h-full w-auto object-contain object-bottom"
+              />
+            </div>
           </div>
         </div>
 

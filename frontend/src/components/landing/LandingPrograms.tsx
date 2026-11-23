@@ -8,25 +8,29 @@ const programs = [
     id: "tryout",
     title: "TryOut UTBK Online",
     subtitle: "Simulasi 7 Subtest + Analitik Skor",
-    image: "/images/program-tryout.jpg",
+    image: "/images/ig-models/cutout-male-pointing.png",
+    backdrop: "bg-[#8FD3FA]",
   },
   {
     id: "intensif",
     title: "Kelas Intensif SNBT",
     subtitle: "Pendalaman Materi & Bedah Soal",
-    image: "/images/program-intensif.jpg",
+    image: "/images/ig-models/cutout-hijab-blue.png",
+    backdrop: "bg-[#FDE68A]",
   },
   {
     id: "reguler",
     title: "Kelas Reguler Sekolah",
     subtitle: "Pemahaman Konsep Dasar Terstruktur",
-    image: "/images/program-regular.jpg",
+    image: "/images/ig-models/cutout-male-thinking.png",
+    backdrop: "bg-[#F6A5B8]",
   },
   {
     id: "konsultasi",
     title: "Konsultasi Jurusan & PTN",
     subtitle: "Strategi Pemilihan Prodi Impian",
-    image: "/images/program-konsultasi.jpg",
+    image: "/images/ig-models/cutout-hijab-beige.png",
+    backdrop: "bg-[#C7D2FE]",
   },
 ];
 
@@ -78,11 +82,13 @@ export function LandingPrograms() {
         </div>
 
         <div className="lg:col-span-5">
-          <div className="overflow-hidden rounded-3xl border border-white/20 bg-white/10 p-3 backdrop-blur">
+          <div
+            className={`relative flex h-80 sm:h-96 items-end justify-center overflow-hidden rounded-[2rem] ${active.backdrop} px-6 pt-6 shadow-xl transition-colors duration-300`}
+          >
             <img
               src={active.image}
               alt={active.title}
-              className="h-72 w-full rounded-2xl object-cover sm:h-80"
+              className="max-h-full w-auto object-contain object-bottom drop-shadow-lg transition-all duration-300"
             />
           </div>
         </div>

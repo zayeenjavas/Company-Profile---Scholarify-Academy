@@ -18,9 +18,20 @@ const cardBackdrops = [
 ];
 
 const STUDIO_PORTRAITS: Record<string, string> = {
+  aini: "/images/mentors/studio/aini.jpg",
+  almas: "/images/mentors/studio/almas.jpg",
   fahreza: "/images/mentors/studio/fahreza.jpg",
+  farrel: "/images/mentors/studio/farrel.jpg",
+  hanief: "/images/mentors/studio/hanief.jpg",
+  maldini: "/images/mentors/studio/maldini.jpg",
+  nayla: "/images/mentors/studio/nayla.jpg",
+  rara: "/images/mentors/studio/rara.jpg",
+  rendi: "/images/mentors/studio/rendi.jpg",
   rifai: "/images/mentors/studio/rifai.jpg",
+  salma: "/images/mentors/studio/salma.jpg",
+  salwa: "/images/mentors/studio/salwa.jpg",
   tegar: "/images/mentors/studio/tegar.jpg",
+  wildan: "/images/mentors/studio/wildan.jpg",
 };
 
 const LOCAL_PORTRAITS = new Set([

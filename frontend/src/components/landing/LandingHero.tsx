@@ -93,8 +93,8 @@ export function LandingHero({
       </video>
       <div className="pointer-events-none absolute inset-0 hidden dark:block bg-gradient-to-b from-[#061124]/60 via-[#061124]/30 to-[#061124]/70" />
 
-      {/* Mobile Centered Brand Title (since top nav is desktop-only) */}
-      <div className="relative z-10 flex justify-center pt-2 lg:hidden">
+      {/* Mobile Centered Brand Title (below centered ThemeToggle) */}
+      <div className="relative z-10 flex justify-center pt-10 lg:hidden">
         <span
           className="text-2xl tracking-tight text-[#0B1B3B] dark:text-white"
           style={{ fontFamily: "'Instrument Serif', Georgia, serif" }}

@@ -41,8 +41,8 @@ export function LandingNavbar({ user }: { user: UserProfile | null }) {
 
   return (
     <>
-      {/* Top Right Floating ThemeToggle (PWA Mobile Only) */}
-      <div className="fixed top-4 right-4 z-50 lg:hidden [&_button]:h-10 [&_button]:w-10 [&_button]:rounded-full [&_button]:border-white/25 [&_button]:bg-slate-950/60 [&_button]:text-white [&_button]:shadow-lg [&_button]:backdrop-blur-xl [&_button:hover]:bg-slate-950/80">
+      {/* Top Center Floating ThemeToggle (PWA Mobile Only) */}
+      <div className="fixed top-3 left-1/2 -translate-x-1/2 z-50 lg:hidden [&_button]:h-9 [&_button]:w-9 [&_button]:rounded-full [&_button]:border-white/25 [&_button]:bg-slate-950/60 [&_button]:text-white [&_button]:shadow-lg [&_button]:backdrop-blur-xl [&_button:hover]:bg-slate-950/80">
         <ThemeToggle />
       </div>
 

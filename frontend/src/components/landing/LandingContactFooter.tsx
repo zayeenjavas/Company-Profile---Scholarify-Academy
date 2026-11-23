@@ -41,13 +41,15 @@ export function LandingContactFooter() {
     <>
       <section id="kontak" className="bg-background py-16 sm:py-24">
         <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-10 px-4 sm:px-6 lg:grid-cols-12">
-          {/* Kiri: Foto Aktivitas Belajar Scholarify (Rounded-2xl, ala referensi) */}
+          {/* Kiri: Model Scholarify Siap Membantu */}
           <div className="lg:col-span-5">
-            <img
-              src="/images/program-intensif.jpg"
-              alt="Konsultasi & Belajar Scholarify"
-              className="h-[360px] sm:h-[420px] w-full rounded-2xl object-cover object-center shadow-md"
-            />
+            <div className="relative flex h-[360px] sm:h-[420px] w-full items-end justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-[#EBEFFE] via-[#DCE5FF] to-[#C7D2FE] dark:from-[#131C3A] dark:via-[#19254D] dark:to-[#1E2E63] pt-6 px-4 shadow-md">
+              <img
+                src="/images/ig-models/model-pointing.webp"
+                alt="Konsultasi & Belajar Scholarify"
+                className="max-h-full w-auto object-contain object-bottom"
+              />
+            </div>
           </div>
 
           {/* Kanan: Open Editorial Contact Form (tanpa kotak Card kaku, ala referensi) */}

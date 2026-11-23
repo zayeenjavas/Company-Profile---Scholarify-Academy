@@ -144,6 +144,36 @@ export default function TryoutPortalPage() {
       {/* Daftar Paket TryOut (Lavender Surface matching LandingPackages) */}
       <section className="bg-[#EBEFFE] dark:bg-muted/30 py-14 sm:py-16">
         <div className="mx-auto max-w-6xl space-y-8 px-4 sm:px-6">
+          {/* Contextual Model Callout Banner */}
+          <div className="flex flex-col items-center justify-between gap-6 overflow-hidden rounded-3xl border border-slate-200/80 dark:border-border bg-white dark:bg-card px-6 pt-6 sm:flex-row sm:px-8 shadow-sm">
+            <div className="space-y-2 pb-6 sm:max-w-xl">
+              <Badge className="bg-[#5B6CFF]/10 text-[#5B6CFF] border-[#5B6CFF]/20">
+                {isSubscribed ? "Akses Premium Aktif" : "Panduan Mulai TryOut"}
+              </Badge>
+              <h2 className="text-xl font-bold tracking-tight sm:text-2xl">
+                {isSubscribed
+                  ? "Siap Taklukkan Semua Batch UTBK-SNBT!"
+                  : "Bingung Mulai dari Mana? Coba Paket Gratis Dulu!"}
+              </h2>
+              <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                {isSubscribed
+                  ? "Seluruh paket TryOut & pembahasan lengkap sudah terbuka. Cek progres skor skala 0–1000 dan rasionalisasi passing grade PTN di Dashboard."
+                  : "Pilih paket bertanda Gratis untuk langsung simulasi tanpa biaya, atau masukkan kode voucher sekolah (mis. SMA IMBS) di bawah untuk membuka semua paket Premium."}
+              </p>
+            </div>
+            <div className="flex h-44 shrink-0 items-end justify-center">
+              <img
+                src={
+                  isSubscribed
+                    ? "/images/ig-models/model-success.webp"
+                    : "/images/ig-models/model-confused.webp"
+                }
+                alt="Model Siswa Scholarify"
+                className="h-full w-auto object-contain object-bottom"
+              />
+            </div>
+          </div>
+
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div className="space-y-1.5">
               <SectionEyebrow label="DAFTAR PAKET" />

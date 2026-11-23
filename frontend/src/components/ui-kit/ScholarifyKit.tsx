@@ -8,7 +8,6 @@ import type { UserDto } from "@/src/api/contracts";
 import { mapUserDto } from "@/src/api/mappers";
 import type { UserProfile } from "@/src/types/domain";
 import { Button } from "@/components/ui/button";
-import { SmoothScrollProvider } from "@/src/components/common/SmoothScrollProvider";
 import { LandingNavbar } from "@/src/components/landing/LandingNavbar";
 import { LandingContactFooter } from "@/src/components/landing/LandingContactFooter";
 
@@ -223,39 +222,37 @@ export function PageShell({
   }, [initialUser]);
 
   return (
-    <SmoothScrollProvider>
-      <div className="min-h-screen bg-background text-foreground pb-24 lg:pb-0">
-        <LandingNavbar user={user} />
-        <main>{children}</main>
-        {hideContactSection ? (
-          <footer className="border-t bg-background py-8">
-            <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 text-xs text-muted-foreground sm:flex-row sm:px-6">
-              <div className="flex items-center gap-2 font-semibold text-foreground">
-                <img
-                  src="/images/scholarify-logo.png"
-                  alt="Scholarify"
-                  className="h-6 w-6 object-contain"
-                />
-                <span>Scholarify</span>
-              </div>
-              <p>© {new Date().getFullYear()} Scholarify. Platform Simulasi TryOut UTBK &amp; Belajar.</p>
-              <div className="flex items-center gap-4">
-                <Link href="/ui-kit" className="hover:text-foreground">
-                  UI Kit
-                </Link>
-                <Link href="/tryout" className="hover:text-foreground">
-                  TryOut
-                </Link>
-                <Link href="/login" className="hover:text-foreground">
-                  Masuk
-                </Link>
-              </div>
+    <div className="min-h-screen bg-background text-foreground pb-24 lg:pb-0">
+      <LandingNavbar user={user} />
+      <main>{children}</main>
+      {hideContactSection ? (
+        <footer className="border-t bg-background py-8">
+          <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 text-xs text-muted-foreground sm:flex-row sm:px-6">
+            <div className="flex items-center gap-2 font-semibold text-foreground">
+              <img
+                src="/images/scholarify-logo.png"
+                alt="Scholarify"
+                className="h-6 w-6 object-contain"
+              />
+              <span>Scholarify</span>
             </div>
-          </footer>
-        ) : (
-          <LandingContactFooter />
-        )}
-      </div>
-    </SmoothScrollProvider>
+            <p>© {new Date().getFullYear()} Scholarify. Platform Simulasi TryOut UTBK &amp; Belajar.</p>
+            <div className="flex items-center gap-4">
+              <Link href="/ui-kit" className="hover:text-foreground">
+                UI Kit
+              </Link>
+              <Link href="/tryout" className="hover:text-foreground">
+                TryOut
+              </Link>
+              <Link href="/login" className="hover:text-foreground">
+                Masuk
+              </Link>
+            </div>
+          </div>
+        </footer>
+      ) : (
+        <LandingContactFooter />
+      )}
+    </div>
   );
 }

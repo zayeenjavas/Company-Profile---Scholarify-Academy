@@ -37,7 +37,7 @@ export function LandingAbout() {
           <div className="space-y-4">
             <div className="relative flex h-56 sm:h-64 items-end justify-center overflow-hidden rounded-2xl bg-[#C4B5FD] px-2 pt-4 shadow-md">
               <img
-                src="/images/ig-models/about-denim-books.png"
+                src="/images/ig-models/about-denim-books.webp"
                 alt="Siswa Scholarify"
                 className="max-h-full w-auto object-contain object-bottom"
               />
@@ -71,7 +71,7 @@ export function LandingAbout() {
 
             <div className="relative flex h-56 sm:h-64 items-end justify-center overflow-hidden rounded-2xl bg-[#F472B6] px-2 pt-4 shadow-md">
               <img
-                src="/images/ig-models/about-denim-pointing.png"
+                src="/images/ig-models/about-denim-pointing.webp"
                 alt="Persiapan UTBK Scholarify"
                 className="max-h-full w-auto object-contain object-bottom"
               />

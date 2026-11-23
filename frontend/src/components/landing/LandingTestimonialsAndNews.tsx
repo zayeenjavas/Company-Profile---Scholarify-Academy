@@ -44,7 +44,7 @@ export function LandingTestimonialsAndNews({
           <div className="relative overflow-hidden rounded-3xl bg-[#FF4D3D] px-6 py-10 text-center text-white shadow-lg sm:px-12 sm:py-12">
             {/* Left Student Model Cutout (ala referensi) */}
             <img
-              src="/images/ig-models/cutout-hijab-blue.png"
+              src="/images/ig-models/cutout-hijab-blue.webp"
               alt="Siswa Scholarify"
               className="pointer-events-none hidden md:block absolute left-6 bottom-0 h-44 w-auto object-contain object-bottom drop-shadow-md"
             />

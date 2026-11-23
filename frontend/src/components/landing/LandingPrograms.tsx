@@ -126,14 +126,16 @@ export function LandingPrograms() {
         </div>
 
         {/* Kanan: Notched Asymmetric Cutout Frame + Vertical PTN Strip */}
-        <div className="flex items-center justify-center gap-5 lg:col-span-6">
+        <div className="flex items-center justify-center gap-6 lg:col-span-6">
           <div
-            className={`relative flex h-[340px] sm:h-[400px] w-full max-w-[420px] items-end justify-center overflow-hidden rounded-[2rem] ${active.backdrop} px-6 pt-8 shadow-2xl transition-colors duration-300`}
+            className={`relative flex h-[340px] sm:h-[400px] w-full max-w-[420px] items-end ${
+              active.id === "tryout" ? "justify-end pr-0 pl-4" : "justify-center px-6"
+            } overflow-hidden rounded-[2rem] ${active.backdrop} pt-8 shadow-2xl transition-colors duration-300`}
           >
-            {/* Top-right organic notch cutout (ala referensi) */}
+            {/* Top-left organic notch cutout (ala referensi, jauh dari kepala model) */}
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute right-0 top-0 z-20 h-16 w-16 rounded-bl-[2rem] bg-[#0E2492]"
+              className="pointer-events-none absolute left-0 top-0 z-20 h-14 w-14 rounded-br-[1.75rem] bg-[#0E2492]"
             />
 
             <img
@@ -143,10 +145,14 @@ export function LandingPrograms() {
             />
           </div>
 
-          {/* Vertical Trust Strip (desktop only, ala referensi) */}
-          <div className="hidden xl:flex flex-col items-center justify-between gap-7 py-4 text-xs font-bold tracking-widest text-white/75 select-none">
+          {/* Vertical Trust Strip (desktop only, writing-mode vertical-rl agar tidak bertumpuk) */}
+          <div className="hidden xl:flex flex-col items-center justify-center gap-6 py-2 text-[11px] font-bold tracking-[0.22em] text-white/75 select-none">
             {["UGM", "ITB", "UI", "UNAIR", "UNDIP"].map((ptn) => (
-              <span key={ptn} className="-rotate-90 whitespace-nowrap">
+              <span
+                key={ptn}
+                className="rotate-180 whitespace-nowrap"
+                style={{ writingMode: "vertical-rl" }}
+              >
                 {ptn}
               </span>
             ))}

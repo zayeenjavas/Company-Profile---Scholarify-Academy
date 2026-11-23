@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { prisma } from "@/src/server/db";
+import { auth } from "@/src/server/auth/betterAuth";
 import { signAuthToken } from "@/src/server/auth/jwt";
 import { AUTH_COOKIE_NAME } from "@/src/server/auth/guards";
 import { serializeUserDto } from "@/src/server/services/dtoSerializer";
@@ -50,6 +51,28 @@ export async function POST(req: Request) {
       );
     }
 
+    // Sync Better Auth credential account for existing/seeded users if not yet present
+    const existingCredential = await prisma.account.findFirst({
+      where: { userId: user.id, providerId: "credential" },
+    });
+    if (!existingCredential) {
+      await prisma.account.create({
+        data: {
+          accountId: user.id,
+          providerId: "credential",
+          userId: user.id,
+          password: user.passwordHash,
+        },
+      });
+    }
+
+    // Create Better Auth DB-backed session & signed HttpOnly cookie
+    const baRes = await auth.api.signInUsername({
+      body: { username, password },
+      headers: req.headers,
+      asResponse: true,
+    });
+
     const token = await signAuthToken({
       sub: user.id,
       username: user.username,
@@ -62,6 +85,12 @@ export async function POST(req: Request) {
       token,
       user: userDto,
     });
+
+    // Forward Better Auth Set-Cookie headers
+    const setCookies = baRes.headers.getSetCookie?.() || [];
+    for (const c of setCookies) {
+      res.headers.append("set-cookie", c);
+    }
 
     res.cookies.set(AUTH_COOKIE_NAME, token, {
       httpOnly: true,

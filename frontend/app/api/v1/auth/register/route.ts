@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { prisma } from "@/src/server/db";
+import { auth } from "@/src/server/auth/betterAuth";
 import { signAuthToken } from "@/src/server/auth/jwt";
 import { AUTH_COOKIE_NAME } from "@/src/server/auth/guards";
 import { serializeUserDto } from "@/src/server/services/dtoSerializer";
@@ -53,6 +54,7 @@ export async function POST(req: Request) {
       data: {
         name,
         username,
+        displayUsername: username,
         email,
         passwordHash,
         role: "STUDENT",
@@ -63,8 +65,21 @@ export async function POST(req: Request) {
             status: "NONE",
           },
         },
+        accounts: {
+          create: {
+            accountId: username,
+            providerId: "credential",
+            password: passwordHash,
+          },
+        },
       },
       include: { subscription: true },
+    });
+
+    const baRes = await auth.api.signInUsername({
+      body: { username, password },
+      headers: req.headers,
+      asResponse: true,
     });
 
     const token = await signAuthToken({
@@ -77,6 +92,11 @@ export async function POST(req: Request) {
       { ok: true, token, user: serializeUserDto(created) },
       { status: 201 }
     );
+
+    const setCookies = baRes.headers.getSetCookie?.() || [];
+    for (const c of setCookies) {
+      res.headers.append("set-cookie", c);
+    }
 
     res.cookies.set(AUTH_COOKIE_NAME, token, {
       httpOnly: true,

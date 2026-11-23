@@ -49,24 +49,51 @@ export default function TryoutPortalPage() {
   const [loading, setLoading] = useState(true);
   const [tierFilter, setTierFilter] = useState<"ALL" | "FREE" | "PREMIUM">("ALL");
   const [search, setSearch] = useState("");
+  const [voucherCode, setVoucherCode] = useState("");
+  const [voucherMsg, setVoucherMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  const [redeeming, setRedeeming] = useState(false);
+
+  const loadPortal = async () => {
+    try {
+      const [meRes, pkgRes, resData] = await Promise.all([
+        apiRequest<{ ok: boolean; user: UserDto }>("/auth/me").catch(() => null),
+        apiRequest<{ packages: TryoutPackageDto[] }>("/packages").catch(() => ({ packages: [] })),
+        apiRequest<{ results: ExamResultDto[] }>("/results").catch(() => ({ results: [] })),
+      ]);
+      if (meRes?.user) setUser(mapUserDto(meRes.user));
+      setPackages(pkgRes.packages.map(mapPackageDto));
+      setResults(resData.results.map(mapResultDto));
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const load = async () => {
-      try {
-        const [meRes, pkgRes, resData] = await Promise.all([
-          apiRequest<{ ok: boolean; user: UserDto }>("/auth/me").catch(() => null),
-          apiRequest<{ packages: TryoutPackageDto[] }>("/packages").catch(() => ({ packages: [] })),
-          apiRequest<{ results: ExamResultDto[] }>("/results").catch(() => ({ results: [] })),
-        ]);
-        if (meRes?.user) setUser(mapUserDto(meRes.user));
-        setPackages(pkgRes.packages.map(mapPackageDto));
-        setResults(resData.results.map(mapResultDto));
-      } finally {
-        setLoading(false);
-      }
-    };
-    load();
+    loadPortal();
   }, []);
+
+  const handleRedeemVoucher = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!voucherCode.trim()) return;
+    setRedeeming(true);
+    setVoucherMsg(null);
+    try {
+      const res = await apiRequest<{ ok: boolean; message: string }>("/vouchers/redeem", {
+        method: "POST",
+        body: JSON.stringify({ code: voucherCode.trim() }),
+      });
+      setVoucherMsg({ ok: true, text: res.message });
+      setVoucherCode("");
+      await loadPortal();
+    } catch (err) {
+      setVoucherMsg({
+        ok: false,
+        text: err instanceof Error ? err.message : "Kode voucher tidak valid",
+      });
+    } finally {
+      setRedeeming(false);
+    }
+  };
 
   const isSubscribed = Boolean(user?.subscription.isActive);
 
@@ -249,14 +276,22 @@ export default function TryoutPortalPage() {
                           </Button>
                         </Link>
                       ) : (
-                        <Link href="/login">
+                        <a
+                          href={`https://wa.me/6285156540075?text=${encodeURIComponent(
+                            `Halo Admin Scholarify, saya ingin aktivasi paket TryOut Premium: ${pkg.title}${
+                              user ? ` (username: ${user.username})` : ""
+                            }`
+                          )}`}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
                           <Button
                             size="sm"
                             className="min-h-[38px] rounded-full bg-[#5B6CFF] hover:bg-[#4657EB] text-white px-5 text-xs font-semibold"
                           >
-                            &raquo; Aktifkan
+                            &raquo; Aktifkan via WA
                           </Button>
-                        </Link>
+                        </a>
                       )}
                       <span className="text-sm font-extrabold text-[#FF6B4A]">
                         {pkg.tier === "FREE" ? "Gratis" : "Premium"}
@@ -266,6 +301,47 @@ export default function TryoutPortalPage() {
                 );
               })}
             </div>
+          )}
+
+          {/* Voucher Redeem Sekolah / Event & Aktivasi Premium */}
+          {user && !isSubscribed && (
+            <Card className="rounded-2xl border-[#5B6CFF]/25 bg-white/90 dark:bg-card shadow-sm">
+              <CardContent className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2 text-sm font-bold">
+                    <Crown className="size-4 text-[#FF6B4A]" />
+                    Punya Kode Voucher Sekolah / Mitra?
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    Masukkan kode voucher (mis. dari SMA IMBS atau event Scholarify) untuk langsung membuka seluruh paket TryOut Premium.
+                  </p>
+                  {voucherMsg && (
+                    <p
+                      className={`text-xs font-medium ${
+                        voucherMsg.ok ? "text-emerald-600 dark:text-emerald-400" : "text-destructive"
+                      }`}
+                    >
+                      {voucherMsg.text}
+                    </p>
+                  )}
+                </div>
+                <form onSubmit={handleRedeemVoucher} className="flex items-center gap-2 shrink-0">
+                  <Input
+                    value={voucherCode}
+                    onChange={(e) => setVoucherCode(e.target.value.toUpperCase())}
+                    placeholder="KODE VOUCHER"
+                    className="h-10 w-44 rounded-full font-mono text-xs uppercase"
+                  />
+                  <Button
+                    type="submit"
+                    disabled={redeeming || !voucherCode.trim()}
+                    className="h-10 rounded-full bg-[#2B44FF] hover:bg-[#1E34C8] text-white px-5 text-xs font-semibold"
+                  >
+                    {redeeming ? "Memproses..." : "Tukarkan"}
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
           )}
         </div>
       </section>
@@ -306,8 +382,13 @@ export default function TryoutPortalPage() {
                         <TableCell>
                           <Badge variant="secondary">{r.subtestCode}</Badge>
                         </TableCell>
-                        <TableCell className="font-bold text-[#5B6CFF] tabular-nums">
-                          {Math.round(r.totalScore)}
+                        <TableCell className="tabular-nums">
+                          <span className="font-bold text-[#5B6CFF]">
+                            {Math.round(r.totalScore * 10)}
+                          </span>
+                          <span className="ml-1.5 text-[11px] text-muted-foreground">
+                            ({Math.round(r.totalScore)}%)
+                          </span>
                         </TableCell>
                         <TableCell className="tabular-nums text-xs text-muted-foreground">
                           {r.correctCount} benar · {r.wrongCount} salah · {r.emptyCount} kosong

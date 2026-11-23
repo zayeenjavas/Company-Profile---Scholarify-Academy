@@ -9,11 +9,32 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
 export function LandingContactFooter() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [subject, setSubject] = useState("");
+  const [message, setMessage] = useState("");
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
   const [sent, setSent] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSent(true);
+    setError("");
+    setSending(true);
+    try {
+      const res = await fetch("/api/v1/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, subject, message }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Gagal mengirim pesan");
+      setSent(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Gagal mengirim pesan");
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -43,8 +64,33 @@ export function LandingContactFooter() {
             </div>
 
             {sent ? (
-              <div className="rounded-2xl border border-emerald-500/40 bg-emerald-500/10 p-5 text-sm text-emerald-700 dark:text-emerald-300">
-                Terima kasih! Pesanmu sudah dicatat. Tim Scholarify akan segera menghubungi kamu.
+              <div className="space-y-3 rounded-2xl border border-emerald-500/40 bg-emerald-500/10 p-5 text-sm text-emerald-700 dark:text-emerald-300">
+                <p>
+                  Terima kasih, <strong>{name}</strong>! Pesanmu sudah tersimpan di Inbox Admin Scholarify dan akan segera kami tindak lanjuti.
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  <a
+                    href={`https://wa.me/6285156540075?text=${encodeURIComponent(
+                      `Halo Admin Scholarify, saya ${name} (${email}). Topik: ${subject}. ${message}`
+                    )}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center rounded-full bg-emerald-600 px-4 py-2 text-xs font-semibold text-white hover:bg-emerald-700"
+                  >
+                    Lanjut Chat WhatsApp Admin
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSent(false);
+                      setSubject("");
+                      setMessage("");
+                    }}
+                    className="inline-flex items-center rounded-full border border-emerald-600/30 px-4 py-2 text-xs font-medium hover:bg-emerald-500/10"
+                  >
+                    Kirim Pesan Lain
+                  </button>
+                </div>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -54,6 +100,8 @@ export function LandingContactFooter() {
                   </Label>
                   <Input
                     id="contact-name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                     placeholder="Nama lengkap kamu"
                     className="h-11 rounded-lg border-slate-200 dark:border-border bg-white dark:bg-card"
                     required
@@ -66,6 +114,8 @@ export function LandingContactFooter() {
                   <Input
                     id="contact-email"
                     type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     placeholder="email@contoh.com"
                     className="h-11 rounded-lg border-slate-200 dark:border-border bg-white dark:bg-card"
                     required
@@ -77,7 +127,9 @@ export function LandingContactFooter() {
                   </Label>
                   <Input
                     id="contact-subject"
-                    placeholder="Tulis topik pertanyaanmu (mis. TryOut / Kelas Intensif)"
+                    value={subject}
+                    onChange={(e) => setSubject(e.target.value)}
+                    placeholder="Tulis topik pertanyaanmu (mis. TryOut / Mitra Sekolah / Kelas Intensif)"
                     className="h-11 rounded-lg border-slate-200 dark:border-border bg-white dark:bg-card"
                     required
                   />
@@ -89,20 +141,27 @@ export function LandingContactFooter() {
                   <Textarea
                     id="contact-msg"
                     rows={4}
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
                     placeholder="Tulis pesanmu di sini..."
                     className="rounded-lg border-slate-200 dark:border-border bg-white dark:bg-card"
                     required
                   />
                 </div>
+                {error && (
+                  <p className="sm:col-span-2 text-xs font-medium text-destructive">{error}</p>
+                )}
                 <div className="pt-1 sm:col-span-2 flex items-center gap-1.5">
                   <Button
                     type="submit"
+                    disabled={sending}
                     className="min-h-[42px] rounded-full bg-[#5B6CFF] hover:bg-[#4657EB] text-white px-6 text-xs font-semibold"
                   >
-                    Kirim Pesan
+                    {sending ? "Mengirim..." : "Kirim Pesan"}
                   </Button>
                   <Button
                     type="submit"
+                    disabled={sending}
                     size="icon"
                     aria-label="Kirim"
                     className="h-[42px] w-[42px] rounded-full bg-[#5B6CFF] hover:bg-[#4657EB] text-white"

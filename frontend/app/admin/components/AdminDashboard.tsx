@@ -16,6 +16,7 @@ import {
   Search,
   Menu,
   X,
+  Inbox,
 } from "lucide-react";
 import { apiRequest, setStoredToken } from "@/src/api/client";
 import type { UserProfile } from "@/src/types/domain";
@@ -28,6 +29,7 @@ import { AdminQuestionsTab } from "@/src/components/admin/AdminQuestionsTab";
 import { AdminMonitoringTab } from "@/src/components/admin/AdminMonitoringTab";
 import { AdminUsersTab } from "@/src/components/admin/AdminUsersTab";
 import { AdminCmsTab } from "@/src/components/admin/AdminCmsTab";
+import { AdminLeadsTab } from "@/src/components/admin/AdminLeadsTab";
 import {
   DensButton,
   DensInputGroup,
@@ -45,7 +47,7 @@ import {
 } from "@/src/components/admin/dens-ui";
 import "@/src/styles/dens-admin.css";
 
-export type TabId = "overview" | "packages" | "questions" | "monitoring" | "users" | "cms";
+export type TabId = "overview" | "packages" | "questions" | "monitoring" | "users" | "cms" | "inbox";
 
 interface AdminDashboardProps {
   user: UserProfile;
@@ -62,7 +64,7 @@ export default function AdminDashboard({ user }: AdminDashboardProps) {
 
   useEffect(() => {
     const saved = localStorage.getItem("admin_active_tab") as TabId | null;
-    if (saved && ["overview", "packages", "questions", "monitoring", "users", "cms"].includes(saved)) {
+    if (saved && ["overview", "packages", "questions", "monitoring", "users", "cms", "inbox"].includes(saved)) {
       setActiveTab(saved);
     }
   }, []);
@@ -152,6 +154,7 @@ export default function AdminDashboard({ user }: AdminDashboardProps) {
       count: overviewData?.stats.users.total,
     },
     { id: "cms", label: "Konten Landing (CRM)", shortLabel: "Konten", icon: Globe },
+    { id: "inbox", label: "Inbox Pesan & Mitra", shortLabel: "Inbox", icon: Inbox },
   ];
 
   const filteredTabs = navSearch.trim()
@@ -439,6 +442,7 @@ export default function AdminDashboard({ user }: AdminDashboardProps) {
                 {activeTab === "monitoring" && <AdminMonitoringTab />}
                 {activeTab === "users" && <AdminUsersTab />}
                 {activeTab === "cms" && <AdminCmsTab />}
+                {activeTab === "inbox" && <AdminLeadsTab />}
               </div>
             </main>
           </div>

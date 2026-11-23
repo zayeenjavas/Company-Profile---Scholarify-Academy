@@ -182,3 +182,25 @@ model ExamResult {
 
   session ExamSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 }
+
+model VoucherCode {
+  id           String    @id @default(cuid())
+  code         String    @unique
+  label        String    @default("Mitra Sekolah")
+  durationDays Int       @default(30)
+  maxUses      Int       @default(100)
+  usedCount    Int       @default(0)
+  isActive     Boolean   @default(true)
+  expiresAt    DateTime?
+  createdAt    DateTime  @default(now())
+}
+
+model ContactLead {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String
+  message   String
+  status    String   @default("NEW")
+  createdAt DateTime @default(now())
+}

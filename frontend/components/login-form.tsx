@@ -137,7 +137,10 @@ export function LoginForm({
                   )}
                 </Button>
                 <FieldDescription className="text-center text-xs">
-                  Belum punya akun? Hubungi admin Scholarify untuk aktivasi.
+                  Belum punya akun?{" "}
+                  <a href="/register" className="font-semibold text-[#1E34C8] hover:underline">
+                    Daftar gratis
+                  </a>
                 </FieldDescription>
               </Field>
             </FieldGroup>

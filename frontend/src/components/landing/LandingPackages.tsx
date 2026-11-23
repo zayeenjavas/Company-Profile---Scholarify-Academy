@@ -14,6 +14,7 @@ import {
 import type { TryoutPackage } from "@/src/types/domain";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { TryoutAnimatedCover } from "@/src/components/common/TryoutAnimatedCover";
 
 const PACKAGE_COVERS = [
   "/images/program-tryout.jpg",
@@ -121,12 +122,12 @@ export function LandingPackages({
                     className="group flex flex-col justify-between rounded-2xl border border-slate-200/80 dark:border-border bg-white dark:bg-card p-3.5 shadow-[0_8px_28px_rgba(15,23,42,0.05)] transition-shadow hover:shadow-[0_14px_34px_rgba(79,107,255,0.12)]"
                   >
                     <div>
-                      {/* Rounded Cover Thumbnail */}
-                      <div className="overflow-hidden rounded-xl bg-slate-100 dark:bg-muted">
-                        <img
-                          src={cover}
-                          alt={pkg.title}
-                          className="h-44 w-full object-cover object-top transition-transform duration-300 group-hover:scale-[1.03]"
+                      {/* Animated TryOut Cover */}
+                      <div className="overflow-hidden rounded-xl">
+                        <TryoutAnimatedCover
+                          index={safePage * perPage + idx}
+                          tier={pkg.tier}
+                          questionCount={pkg.questionCount}
                         />
                       </div>
 

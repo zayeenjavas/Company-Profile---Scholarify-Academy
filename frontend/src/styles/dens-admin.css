@@ -1,0 +1,148 @@
+/* Scoped Dens-UI Theme v0.2.0 for Scholarify Admin Console
+   Mars Green #008C8D · Hermès Orange #FF8A00 · Soft Light + Near-Black Dark */
+
+.dens-admin-theme {
+  --radius: 0.875rem;
+
+  --background: #edf0ef;
+  --foreground: #0f1716;
+  --surface: #f5f7f6;
+  --card: #ffffff;
+  --card-foreground: #0f1716;
+  --popover: #ffffff;
+  --popover-foreground: #0f1716;
+
+  --brand: #008c8d;
+  --brand-foreground: #ffffff;
+  --primary: #00797a;
+  --primary-foreground: #ffffff;
+
+  --secondary: #e1e7e5;
+  --secondary-foreground: #0f1716;
+  --muted: #e6ebe9;
+  --muted-foreground: #566361;
+  --accent: #e3efeb;
+  --accent-foreground: #0f1716;
+
+  --highlight: #ff8a00;
+  --highlight-foreground: #1f1100;
+
+  --soft: #c0ebd7;
+  --soft-foreground: #0a4a44;
+  --success: #c0ebd7;
+  --success-foreground: #0a4a44;
+
+  --warning: #ebe3a5;
+  --warning-foreground: #4a3f00;
+  --info: #0b3289;
+  --info-foreground: #ffffff;
+  --destructive: #a42423;
+  --destructive-foreground: #ffffff;
+
+  --border: #dbe2df;
+  --input: #cfd8d5;
+  --ring: #008c8d;
+
+  --chart-1: #059488;
+  --chart-2: #e16c10;
+  --chart-3: #2d54bc;
+  --chart-4: #a79300;
+  --chart-5: #c63895;
+
+  --sidebar: #f6f8f7;
+  --sidebar-foreground: #0f1716;
+  --sidebar-primary: #00797a;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #ffffff;
+  --sidebar-accent-foreground: #0f1716;
+  --sidebar-border: #dbe2df;
+  --sidebar-ring: #008c8d;
+
+  --rail: #0f1716;
+  --rail-foreground: #ecf2f0;
+
+  --elevation-panel: 0 1px 2px rgb(15 23 22 / 0.04), 0 10px 28px -14px rgb(15 23 22 / 0.14);
+  --elevation-raised: 0 2px 6px rgb(15 23 22 / 0.06), 0 18px 40px -16px rgb(15 23 22 / 0.24);
+
+  color: var(--foreground);
+  background-color: var(--background);
+}
+
+.dark .dens-admin-theme {
+  --background: #0c0b0b;
+  --foreground: #ecf2f0;
+  --surface: #121514;
+  --card: #161918;
+  --card-foreground: #ecf2f0;
+  --popover: #1b1f1e;
+  --popover-foreground: #ecf2f0;
+
+  --brand: #008c8d;
+  --brand-foreground: #ffffff;
+  --primary: #19a3a4;
+  --primary-foreground: #031414;
+
+  --secondary: #242a29;
+  --secondary-foreground: #ecf2f0;
+  --muted: #1e2322;
+  --muted-foreground: #9aa8a5;
+  --accent: #1f2b29;
+  --accent-foreground: #ecf2f0;
+
+  --highlight: #ff9a1f;
+  --highlight-foreground: #1f1100;
+
+  --soft: #123f3a;
+  --soft-foreground: #c0ebd7;
+  --success: #123f3a;
+  --success-foreground: #c0ebd7;
+
+  --warning: #39340f;
+  --warning-foreground: #ebe3a5;
+  --info: #15296a;
+  --info-foreground: #cfdaff;
+  --destructive: #f74835;
+  --destructive-foreground: #200604;
+
+  --border: #262c2b;
+  --input: #303736;
+  --ring: #19a3a4;
+
+  --chart-1: #00a0a1;
+  --chart-2: #de7515;
+  --chart-3: #456ed1;
+  --chart-4: #a5931b;
+  --chart-5: #ca449a;
+
+  --sidebar: #111413;
+  --sidebar-foreground: #ecf2f0;
+  --sidebar-primary: #19a3a4;
+  --sidebar-primary-foreground: #031414;
+  --sidebar-accent: #1c2120;
+  --sidebar-accent-foreground: #ecf2f0;
+  --sidebar-border: #232928;
+  --sidebar-ring: #19a3a4;
+
+  --rail: #1b1f1e;
+  --rail-foreground: #ecf2f0;
+
+  --elevation-panel: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 32px -16px rgb(0 0 0 / 0.7);
+  --elevation-raised: 0 2px 6px rgb(0 0 0 / 0.5), 0 20px 44px -16px rgb(0 0 0 / 0.8);
+}
+
+/* Dens-UI utility tokens scoped to .dens-admin-theme */
+.dens-admin-theme .bg-surface { background-color: var(--surface); }
+.dens-admin-theme .bg-rail { background-color: var(--rail); }
+.dens-admin-theme .text-rail-foreground { color: var(--rail-foreground); }
+.dens-admin-theme .bg-brand { background-color: var(--brand); }
+.dens-admin-theme .text-brand { color: var(--brand); }
+.dens-admin-theme .text-brand-foreground { color: var(--brand-foreground); }
+.dens-admin-theme .bg-highlight { background-color: var(--highlight); }
+.dens-admin-theme .text-highlight { color: var(--highlight); }
+.dens-admin-theme .text-highlight-foreground { color: var(--highlight-foreground); }
+.dens-admin-theme .fill-highlight { fill: var(--highlight); }
+.dens-admin-theme .stroke-highlight { stroke: var(--highlight); }
+.dens-admin-theme .bg-soft { background-color: var(--soft); }
+.dens-admin-theme .text-soft-foreground { color: var(--soft-foreground); }
+.dens-admin-theme .shadow-panel { box-shadow: var(--elevation-panel); }
+.dens-admin-theme .shadow-raised { box-shadow: var(--elevation-raised); }

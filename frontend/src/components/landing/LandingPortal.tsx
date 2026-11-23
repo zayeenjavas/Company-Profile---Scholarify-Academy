@@ -11,6 +11,7 @@ import { LandingHero } from "@/src/components/landing/LandingHero";
 import { LandingPrograms } from "@/src/components/landing/LandingPrograms";
 import { LandingAbout } from "@/src/components/landing/LandingAbout";
 import { LandingPackages } from "@/src/components/landing/LandingPackages";
+import { LandingDigitalProducts } from "@/src/components/landing/LandingDigitalProducts";
 import { LandingMentors } from "@/src/components/landing/LandingMentors";
 import { LandingTestimonialsAndNews } from "@/src/components/landing/LandingTestimonialsAndNews";
 import { LandingContactFooter } from "@/src/components/landing/LandingContactFooter";
@@ -66,6 +67,7 @@ export function LandingPortal({ cmsData }: LandingPortalProps) {
           isSubscribed={isSubscribed}
           searchQuery={searchQuery}
         />
+        <LandingDigitalProducts searchQuery={searchQuery} />
         <LandingMentors mentors={cmsData.mentors} />
         <LandingTestimonialsAndNews
           isSubscribed={isSubscribed}

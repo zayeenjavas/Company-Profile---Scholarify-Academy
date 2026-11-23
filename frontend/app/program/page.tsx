@@ -7,6 +7,7 @@ import type { SubtestDto } from "@/src/api/contracts";
 import { mapSubtestDto } from "@/src/api/mappers";
 import type { SubtestInfo } from "@/src/types/domain";
 import { LandingPrograms } from "@/src/components/landing/LandingPrograms";
+import { LandingDigitalProducts } from "@/src/components/landing/LandingDigitalProducts";
 import {
   EditorialHeading,
   PageShell,
@@ -26,12 +27,12 @@ const PROGRAM_DETAILS = [
     ],
   },
   {
-    title: "Kelas Intensif SNBT",
-    badge: "Live & Interaktif",
+    title: "Kelas UTBK Online (PK · PM · PU)",
+    badge: "12 Pertemuan · Des 2026",
     points: [
-      "Pendalaman konsep TPS & Literasi bersama mentor PTN terbaik",
-      "Bedah soal HOTS dan strategi manajemen waktu pengerjaan",
-      "Evaluasi progres mingguan berbasis data skor",
+      "Pendalaman 3 subtes penalaran utama: PK, PM, dan PU bersama mentor Scholarify",
+      "Bedah soal HOTS dan strategi manajemen waktu pengerjaan UTBK-SNBT",
+      "Tersedia tiket Early Bird Rp 349.000 melalui Loket.com",
     ],
   },
   {
@@ -75,6 +76,8 @@ export default function ProgramPage() {
       />
 
       <LandingPrograms />
+
+      <LandingDigitalProducts />
 
       {/* Detail 4 Program */}
       <section className="bg-background py-14 sm:py-16">

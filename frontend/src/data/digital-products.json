@@ -1,0 +1,123 @@
+[
+  {
+    "id": "kelas-utbk-pk-pm-pu",
+    "slug": "kelas-utbk-online-pk-pm-pu",
+    "title": "Kelas UTBK Online (PK · PM · PU)",
+    "category": "Kelas Online",
+    "group": "kelas",
+    "price": 349000,
+    "originalPrice": 399000,
+    "badge": "Early Bird · 12 Pertemuan",
+    "schedule": "12 pertemuan · Mulai Des 2026",
+    "platform": "loket",
+    "checkoutUrl": "https://www.loket.com/event/lolos-utbk-2027-bersama-scholarify-wxp",
+    "ctaLabel": "Beli Tiket di Loket",
+    "whatsappNumber": "6289630032111",
+    "description": "Program kelas intensif UTBK-SNBT 2027 bersama Scholarify yang berfokus pada penguasaan tiga subtes penalaran utama: Pengetahuan Kuantitatif (PK), Penalaran Matematika (PM), dan Penalaran Umum (PU) dalam 12 pertemuan terarah.",
+    "highlights": [
+      "Fokus 3 subtes penalaran utama: PK, PM, dan PU",
+      "12 pertemuan intensif dimulai Desember 2026",
+      "Harga Early Bird Rp 349.000 (harga normal Rp 399.000)"
+    ]
+  },
+  {
+    "id": "ebook-lolos-ptn-2027",
+    "slug": "e-book-lolos-ptn-2027",
+    "title": "E-Book Lolos PTN 2027",
+    "category": "E-Book",
+    "group": "modul",
+    "price": 45000,
+    "badge": "Best Seller",
+    "schedule": "Akses Digital PDF",
+    "platform": "lynk",
+    "checkoutUrl": "https://lynk.id/scholarify/e2n194gkekkg/checkout",
+    "ctaLabel": "Beli E-Book",
+    "whatsappNumber": "6289630032111",
+    "description": "Panduan komprehensif persiapan UTBK-SNBT dan seleksi masuk PTN 2027 yang disusun oleh tim Scholarify untuk membantu siswa memahami peta soal, strategi belajar, dan target skor.",
+    "highlights": [
+      "Panduan strategi belajar & pemetaan target PTN 2027",
+      "Rangkuman konsep penting & tips pengerjaan UTBK",
+      "File PDF langsung dikirim otomatis setelah checkout"
+    ]
+  },
+  {
+    "id": "modul-logaritma-eksponen",
+    "slug": "modul-logaritma-dan-eksponen",
+    "title": "Logaritma & Eksponen",
+    "category": "Modul",
+    "group": "modul",
+    "price": 20000,
+    "badge": "Modul Matematika",
+    "schedule": "Akses Digital PDF",
+    "platform": "lynk",
+    "checkoutUrl": "https://lynk.id/scholarify",
+    "ctaLabel": "Beli Modul",
+    "whatsappNumber": "6289630032111",
+    "description": "Modul khusus pembahasan materi Logaritma & Eksponen lengkap dengan sifat-sifat dasar, variasi soal UTBK, serta langkah penyelesaian yang runtut.",
+    "highlights": [
+      "Ringkasan sifat dan konsep inti Logaritma & Eksponen",
+      "Latihan soal bertahap beserta pembahasan terstruktur",
+      "Cocok untuk penguatan materi sekolah maupun persiapan SNBT"
+    ]
+  },
+  {
+    "id": "jawaban-tantangan-tiktok",
+    "slug": "jawaban-soal-tantangan-tiktok",
+    "title": "Jawaban Soal Tantangan TikTok",
+    "category": "Modul",
+    "group": "modul",
+    "price": 10000,
+    "badge": "Pembahasan Soal",
+    "schedule": "Akses Digital PDF",
+    "platform": "lynk",
+    "checkoutUrl": "https://lynk.id/scholarify",
+    "ctaLabel": "Beli Pembahasan",
+    "whatsappNumber": "6289630032111",
+    "description": "Kumpulan kunci jawaban dan pembahasan lengkap dari seri soal tantangan TikTok @official_scholarify agar kamu bisa mempelajari trik cepat dan konsep dasarnya.",
+    "highlights": [
+      "Pembahasan lengkap soal-soal tantangan TikTok Scholarify",
+      "Langkah penyelesaian ringkas dan mudah diikuti",
+      "Terjangkau untuk latihan harian mandiri"
+    ]
+  },
+  {
+    "id": "private-class-smp-sma",
+    "slug": "private-class-smp-sma",
+    "title": "Private Class (SMP - SMA)",
+    "category": "Kelas Privat",
+    "group": "kelas",
+    "price": 100000,
+    "badge": "Bimbel Privat",
+    "schedule": "Sesi Privat Fleksibel",
+    "platform": "lynk",
+    "checkoutUrl": "https://lynk.id/scholarify",
+    "ctaLabel": "Daftar Kelas",
+    "whatsappNumber": "6289630032111",
+    "description": "Sesi bimbingan belajar privat untuk siswa SMP hingga SMA bersama mentor Scholarify, menyesuaikan kebutuhan materi sekolah, tugas, maupun persiapan ujian.",
+    "highlights": [
+      "Materi disesuaikan dengan kebutuhan siswa SMP/SMA",
+      "Pendampingan interaktif 1-on-1 untuk pemahaman konsep",
+      "Jadwal belajar fleksibel dan terarah"
+    ]
+  },
+  {
+    "id": "private-class-mahasiswa",
+    "slug": "private-class-mahasiswa",
+    "title": "Private Class - Mahasiswa",
+    "category": "Kelas Privat",
+    "group": "kelas",
+    "price": 150000,
+    "badge": "Bimbel Privat",
+    "schedule": "Sesi Privat Fleksibel",
+    "platform": "lynk",
+    "checkoutUrl": "https://lynk.id/scholarify",
+    "ctaLabel": "Daftar Kelas",
+    "whatsappNumber": "6289630032111",
+    "description": "Layanan bimbingan privat khusus mahasiswa untuk pendalaman mata kuliah kuantitatif, matematika, serta diskusi soal dan proyek akademik.",
+    "highlights": [
+      "Dirancang khusus untuk kebutuhan mata kuliah mahasiswa",
+      "Pendalaman konsep & latihan soal tingkat lanjut",
+      "Konsultasi langsung 1-on-1 bersama pengajar"
+    ]
+  }
+]

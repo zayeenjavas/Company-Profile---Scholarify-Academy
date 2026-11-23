@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 import {
   ArrowRight,
   BookOpen,
@@ -10,7 +11,6 @@ import {
   Menu,
   ShieldCheck,
   User,
-  Users,
 } from "lucide-react";
 import type { UserProfile } from "@/src/types/domain";
 import { ThemeToggle } from "@/src/components/common/ThemeToggle";
@@ -36,6 +36,14 @@ const navLinks = [
 
 export function LandingNavbar({ user }: { user: UserProfile | null }) {
   const pathname = usePathname();
+  const [mobileSheetOpen, setMobileSheetOpen] = useState(false);
+  const accountHref = user ? (user.role === "ADMIN" ? "/admin" : "/dashboard") : "/login";
+  const accountLabel = user ? (user.role === "ADMIN" ? "Admin" : "Dashboard") : "Masuk";
+  const isAccountActive =
+    pathname.startsWith("/login") ||
+    pathname.startsWith("/dashboard") ||
+    pathname.startsWith("/admin");
+
   return (
     <>
       {/* Top Floating Glass Pill Navbar (Desktop Only) */}
@@ -186,12 +194,12 @@ export function LandingNavbar({ user }: { user: UserProfile | null }) {
         </header>
       </div>
 
-      {/* Floating Bottom Glass Navigation (Mobile Only) */}
+      {/* Floating Bottom Glass Navigation (PWA Mobile Only) */}
       <nav
         aria-label="Navigasi Mobile"
         className="fixed bottom-3 left-3 right-3 z-50 mx-auto max-w-md lg:hidden pb-[env(safe-area-inset-bottom)]"
       >
-        <div className="grid grid-cols-5 items-center gap-1 rounded-full border border-white/25 bg-slate-950/65 p-1.5 text-white shadow-2xl backdrop-blur-xl">
+        <div className="grid grid-cols-5 items-center gap-1 rounded-full border border-white/25 bg-slate-950/70 p-1.5 text-white shadow-2xl backdrop-blur-xl">
           <Link
             href="/"
             className={`flex min-h-[44px] flex-col items-center justify-center gap-0.5 rounded-full text-[10px] font-medium transition-colors ${
@@ -212,29 +220,93 @@ export function LandingNavbar({ user }: { user: UserProfile | null }) {
           </Link>
           <Link
             href="/tryout"
-            className="flex min-h-[44px] flex-col items-center justify-center gap-0.5 rounded-full bg-[#2B44FF] text-[10px] font-semibold text-white shadow-md transition-transform active:scale-95"
+            className={`flex min-h-[44px] flex-col items-center justify-center gap-0.5 rounded-full bg-[#2B44FF] text-[10px] font-semibold text-white shadow-md transition-transform active:scale-95 ${
+              pathname.startsWith("/tryout") ? "ring-2 ring-white/75" : ""
+            }`}
           >
             <BookOpen className="size-4 stroke-[1.75]" />
             <span>TryOut</span>
           </Link>
           <Link
-            href="/tim"
+            href={accountHref}
             className={`flex min-h-[44px] flex-col items-center justify-center gap-0.5 rounded-full text-[10px] font-medium transition-colors ${
-              pathname.startsWith("/tim") ? "bg-white/15 text-white" : "text-white/80 hover:bg-white/10 hover:text-white"
+              isAccountActive ? "bg-white/15 text-white" : "text-white/80 hover:bg-white/10 hover:text-white"
             }`}
           >
-            <Users className="size-4 stroke-[1.75]" />
-            <span>Tim</span>
-          </Link>
-          <Link
-            href={user ? (user.role === "ADMIN" ? "/admin" : "/tryout") : "/login"}
-            className="flex min-h-[44px] flex-col items-center justify-center gap-0.5 rounded-full text-[10px] font-medium text-white/80 transition-colors hover:bg-white/10 hover:text-white"
-          >
             <User className="size-4 stroke-[1.75]" />
-            <span>{user ? (user.role === "ADMIN" ? "Admin" : "Akun") : "Masuk"}</span>
+            <span>{accountLabel}</span>
           </Link>
+          <button
+            type="button"
+            onClick={() => setMobileSheetOpen(true)}
+            aria-label="Menu Lainnya"
+            className="flex min-h-[44px] flex-col items-center justify-center gap-0.5 rounded-full text-[10px] font-medium text-white/80 transition-colors hover:bg-white/10 hover:text-white cursor-pointer"
+          >
+            <Menu className="size-4 stroke-[1.75]" />
+            <span>Lainnya</span>
+          </button>
         </div>
       </nav>
+
+      {/* Mobile Drawer Sheet (accessible via "Lainnya" on PWA Mobile) */}
+      <Sheet open={mobileSheetOpen} onOpenChange={setMobileSheetOpen}>
+        <SheetContent side="right" className="w-72 p-5 lg:hidden">
+          <SheetHeader className="mb-4 text-left">
+            <div className="flex items-center justify-between gap-2 pr-6">
+              <SheetTitle className="flex items-center gap-2">
+                Scholarify
+                {user?.subscription.isActive && <Badge>Premium</Badge>}
+              </SheetTitle>
+              <ThemeToggle />
+            </div>
+          </SheetHeader>
+          <div className="flex flex-col gap-1">
+            {navLinks.map((l) => {
+              const active = l.href === "/" ? pathname === "/" : pathname.startsWith(l.href);
+              return (
+                <Link
+                  key={l.href}
+                  href={l.href}
+                  onClick={() => setMobileSheetOpen(false)}
+                  className={`rounded-lg px-3 py-2.5 text-sm font-medium min-h-[44px] flex items-center transition-colors ${
+                    active ? "bg-muted font-semibold text-foreground" : "hover:bg-muted"
+                  }`}
+                >
+                  {l.label}
+                </Link>
+              );
+            })}
+            <div className="mt-4 flex flex-col gap-2 border-t pt-4">
+              {user?.role === "ADMIN" && (
+                <Link href="/admin" onClick={() => setMobileSheetOpen(false)}>
+                  <Button variant="outline" className="w-full min-h-[44px]">
+                    Admin Panel
+                  </Button>
+                </Link>
+              )}
+              {user && user.role !== "ADMIN" && (
+                <Link href="/dashboard" onClick={() => setMobileSheetOpen(false)}>
+                  <Button variant="outline" className="w-full min-h-[44px]">
+                    Dashboard Saya
+                  </Button>
+                </Link>
+              )}
+              {!user && (
+                <Link href="/login" onClick={() => setMobileSheetOpen(false)}>
+                  <Button variant="outline" className="w-full min-h-[44px]">
+                    Login
+                  </Button>
+                </Link>
+              )}
+              <Link href="/tryout" onClick={() => setMobileSheetOpen(false)}>
+                <Button className="w-full min-h-[44px] bg-[#2B44FF] hover:bg-[#1E34C8] text-white">
+                  Portal TryOut
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </SheetContent>
+      </Sheet>
     </>
   );
 }

@@ -271,9 +271,7 @@ export function LandingMentors({ mentors }: { mentors: SanityMentor[] }) {
                   }`}
                 >
                   <div
-                    className={`group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/80 dark:border-border bg-white dark:bg-card p-1.5 shadow-[0_8px_28px_rgba(15,23,42,0.06)] transition-shadow hover:shadow-[0_14px_34px_rgba(79,107,255,0.14)] ${
-                      founder ? "ring-2 ring-[#4F6BFF]/85" : ""
-                    }`}
+                    className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/80 dark:border-border bg-white dark:bg-card p-1.5 shadow-[0_8px_28px_rgba(15,23,42,0.06)] transition-shadow hover:shadow-[0_14px_34px_rgba(79,107,255,0.14)]"
                   >
                     <div
                       className={`relative aspect-[4/4.1] w-full overflow-hidden rounded-xl flex items-center justify-center ${

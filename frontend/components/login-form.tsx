@@ -100,7 +100,7 @@ export function LoginForm() {
               placeholder="mis. nadia_putri"
               autoComplete="username"
               required
-              className="w-full bg-transparent text-sm text-[var(--foreground)] placeholder:text-[var(--muted-foreground)] focus:outline-none"
+              className="w-full bg-transparent text-sm text-[var(--foreground)] placeholder:text-[var(--muted-foreground)] focus:outline-none [&:-webkit-autofill]:shadow-[0_0_0_100px_var(--card)_inset]"
             />
           </DensInputGroup>
         </div>
@@ -139,7 +139,7 @@ export function LoginForm() {
               placeholder="••••••••"
               autoComplete="current-password"
               required
-              className="w-full bg-transparent text-sm text-[var(--foreground)] placeholder:text-[var(--muted-foreground)] focus:outline-none"
+              className="w-full bg-transparent text-sm text-[var(--foreground)] placeholder:text-[var(--muted-foreground)] focus:outline-none [&:-webkit-autofill]:shadow-[0_0_0_100px_var(--card)_inset]"
             />
           </DensInputGroup>
         </div>

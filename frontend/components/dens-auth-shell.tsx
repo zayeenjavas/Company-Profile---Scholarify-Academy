@@ -46,44 +46,34 @@ export function DensAuthShell({
               <span className="text-lg font-bold tracking-[-0.02em]">Scholarify</span>
             </Link>
 
-            <div className="mt-auto w-full max-w-[480px]">
-              <div className="relative aspect-[600/620] w-full">
-                <svg viewBox="0 0 600 620" className="absolute inset-0 size-full" aria-hidden>
-                  {/* Top Mars Green pane */}
-                  <rect x="0" y="0" width="600" height="350" rx="28" fill="#008C8D" />
-                  {/* Bottom-left Soft Mint pane */}
-                  <rect x="0" y="366" width="334" height="254" rx="28" fill="#C0EBD7" />
-                  {/* Bottom-right Hermès Orange pane */}
-                  <rect x="350" y="366" width="250" height="254" rx="28" fill="#FF8A00" />
-                </svg>
+            <div className="mt-auto flex w-full flex-col gap-3.5">
+              {/* Top Mars Green pane */}
+              <div className="rounded-[24px] bg-[#008C8D] p-7">
+                <p className="text-[32px] xl:text-[38px] font-bold leading-[1.06] tracking-[-0.03em] text-white">
+                  Satu ruang ujian, siap tembus PTN.
+                </p>
+                <p className="mt-3.5 max-w-[92%] text-[15px] xl:text-[17px] font-medium leading-snug text-[#031414]">
+                  TryOut UTBK-SNBT dengan timer server, passing grade PTN, dan pembahasan lengkap.
+                </p>
+              </div>
 
-                {/* Top Card Copy */}
-                <div className="absolute inset-x-7 top-7">
-                  <p className="text-[36px] xl:text-[42px] font-bold leading-[1.04] tracking-[-0.035em] text-white">
-                    Satu ruang ujian, siap tembus PTN.
-                  </p>
-                  <p className="mt-4 max-w-[88%] text-[16px] xl:text-[18px] font-medium leading-snug text-[#031414]">
-                    TryOut UTBK-SNBT dengan timer server, passing grade PTN, dan pembahasan lengkap.
-                  </p>
-                </div>
-
-                {/* Bottom-Left Metric */}
-                <div className="absolute left-7 top-[394px] w-[280px] text-[#00585a]">
-                  <div className="text-[44px] xl:text-[50px] font-bold leading-none tracking-[-0.04em] tabular-nums">
+              {/* Bottom 2-column panes */}
+              <div className="grid grid-cols-[1.25fr_1fr] gap-3.5">
+                <div className="flex flex-col justify-between rounded-[24px] bg-[#C0EBD7] p-6 text-[#00585a]">
+                  <div className="text-[42px] xl:text-[48px] font-bold leading-none tracking-[-0.04em] tabular-nums">
                     7
                   </div>
-                  <div className="mt-2 text-[15px] font-semibold leading-tight">
+                  <div className="mt-4 text-[14px] font-semibold leading-snug">
                     subtest resmi UTBK-SNBT terkurasi
                   </div>
                 </div>
 
-                {/* Bottom-Right Metric */}
-                <div className="absolute left-[374px] top-[394px] w-[200px] text-[#1f1100]">
-                  <div className="text-[40px] xl:text-[44px] font-bold leading-none tracking-[-0.04em] tabular-nums">
+                <div className="flex flex-col justify-between rounded-[24px] bg-[#FF8A00] p-6 text-[#1f1100]">
+                  <div className="text-[36px] xl:text-[42px] font-bold leading-none tracking-[-0.04em] tabular-nums">
                     1000
                   </div>
-                  <div className="mt-2 text-[15px] font-semibold leading-tight">
-                    skala skor &amp; target passing grade
+                  <div className="mt-4 text-[14px] font-semibold leading-snug">
+                    skala skor &amp; target PTN
                   </div>
                 </div>
               </div>

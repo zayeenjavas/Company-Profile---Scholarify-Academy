@@ -77,52 +77,52 @@ export default function RegisterPage() {
 
         <form onSubmit={handleSubmit} className="mt-6 grid gap-3.5">
           <div className="grid gap-1.5">
-            <Label htmlFor="reg-name">Nama Lengkap</Label>
-            <DensInputGroup start={<UserCheck />} className="h-11 rounded-xl">
+            <Label htmlFor="reg-name" className="text-[var(--foreground)]">Nama Lengkap</Label>
+            <DensInputGroup start={<UserCheck />} className="h-11 rounded-xl border-[var(--input)] bg-[var(--surface)]">
               <input
                 id="reg-name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Misal: Aisyah Putri"
                 required
-                className="w-full bg-transparent text-sm focus:outline-none"
+                className="w-full bg-transparent text-sm text-[var(--foreground)] placeholder:text-[var(--muted-foreground)] focus:outline-none [&:-webkit-autofill]:[-webkit-text-fill-color:var(--foreground)] [&:-webkit-autofill]:caret-[var(--foreground)] [&:-webkit-autofill]:shadow-[0_0_0_100px_var(--surface)_inset]"
               />
             </DensInputGroup>
           </div>
 
           <div className="grid gap-1.5">
-            <Label htmlFor="reg-username">Username</Label>
-            <DensInputGroup start={<User />} className="h-11 rounded-xl">
+            <Label htmlFor="reg-username" className="text-[var(--foreground)]">Username</Label>
+            <DensInputGroup start={<User />} className="h-11 rounded-xl border-[var(--input)] bg-[var(--surface)]">
               <input
                 id="reg-username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/\s+/g, ""))}
                 placeholder="misal: aisyah_putri"
                 required
-                className="w-full bg-transparent text-sm focus:outline-none"
+                className="w-full bg-transparent text-sm text-[var(--foreground)] placeholder:text-[var(--muted-foreground)] focus:outline-none [&:-webkit-autofill]:[-webkit-text-fill-color:var(--foreground)] [&:-webkit-autofill]:caret-[var(--foreground)] [&:-webkit-autofill]:shadow-[0_0_0_100px_var(--surface)_inset]"
               />
             </DensInputGroup>
           </div>
 
           <div className="grid gap-1.5">
-            <Label htmlFor="reg-email">Email (Opsional)</Label>
-            <DensInputGroup start={<Mail />} className="h-11 rounded-xl">
+            <Label htmlFor="reg-email" className="text-[var(--foreground)]">Email (Opsional)</Label>
+            <DensInputGroup start={<Mail />} className="h-11 rounded-xl border-[var(--input)] bg-[var(--surface)]">
               <input
                 id="reg-email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="email@contoh.com"
-                className="w-full bg-transparent text-sm focus:outline-none"
+                className="w-full bg-transparent text-sm text-[var(--foreground)] placeholder:text-[var(--muted-foreground)] focus:outline-none [&:-webkit-autofill]:[-webkit-text-fill-color:var(--foreground)] [&:-webkit-autofill]:caret-[var(--foreground)] [&:-webkit-autofill]:shadow-[0_0_0_100px_var(--surface)_inset]"
               />
             </DensInputGroup>
           </div>
 
           <div className="grid gap-1.5">
-            <Label htmlFor="reg-password">Password</Label>
+            <Label htmlFor="reg-password" className="text-[var(--foreground)]">Password</Label>
             <DensInputGroup
               start={<Lock />}
-              className="h-11 rounded-xl"
+              className="h-11 rounded-xl border-[var(--input)] bg-[var(--surface)]"
               end={
                 <button
                   type="button"
@@ -141,7 +141,7 @@ export default function RegisterPage() {
                 placeholder="Minimal 6 karakter"
                 minLength={6}
                 required
-                className="w-full bg-transparent text-sm focus:outline-none"
+                className="w-full bg-transparent text-sm text-[var(--foreground)] placeholder:text-[var(--muted-foreground)] focus:outline-none [&:-webkit-autofill]:[-webkit-text-fill-color:var(--foreground)] [&:-webkit-autofill]:caret-[var(--foreground)] [&:-webkit-autofill]:shadow-[0_0_0_100px_var(--surface)_inset]"
               />
             </DensInputGroup>
           </div>
@@ -181,7 +181,7 @@ export default function RegisterPage() {
           variant="outline"
           onClick={onGoogleSignUp}
           disabled={googleLoading}
-          className="h-11 w-full rounded-xl gap-2.5 text-xs font-semibold"
+          className="h-11 w-full rounded-xl gap-2.5 border-[var(--input)] bg-[var(--surface)] text-xs font-semibold text-[var(--foreground)] hover:bg-[var(--muted)]"
         >
           <svg className="size-4" viewBox="0 0 24 24" aria-hidden>
             <path

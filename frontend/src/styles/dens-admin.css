@@ -66,9 +66,11 @@
 
   color: var(--foreground);
   background-color: var(--background);
+  color-scheme: light;
 }
 
 .dark .dens-admin-theme {
+  color-scheme: dark;
   --background: #0c0b0b;
   --foreground: #ecf2f0;
   --surface: #121514;

@@ -9,13 +9,13 @@ import {
   EyeOff,
   Loader2,
   Lock,
+  ShieldCheck,
   User,
 } from "lucide-react";
 import { apiRequest, setStoredToken } from "@/src/api/client";
 import type { LoginResponseDto } from "@/src/api/contracts";
 import { toErrorMessage } from "@/src/api/errors";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { DensInputGroup } from "@/src/components/admin/dens-ui";
@@ -90,8 +90,8 @@ export function LoginForm() {
 
       <form onSubmit={onSubmit} className="mt-7 grid gap-4">
         <div className="grid gap-2">
-          <Label htmlFor="username">Username</Label>
-          <DensInputGroup start={<User />} className="h-11 rounded-xl">
+          <Label htmlFor="username" className="text-[var(--foreground)]">Username</Label>
+          <DensInputGroup start={<User />} className="h-11 rounded-xl border-[var(--input)] bg-[var(--surface)]">
             <input
               id="username"
               type="text"
@@ -100,14 +100,14 @@ export function LoginForm() {
               placeholder="mis. nadia_putri"
               autoComplete="username"
               required
-              className="w-full bg-transparent text-sm text-[var(--foreground)] placeholder:text-[var(--muted-foreground)] focus:outline-none [&:-webkit-autofill]:shadow-[0_0_0_100px_var(--card)_inset]"
+              className="w-full bg-transparent text-sm text-[var(--foreground)] placeholder:text-[var(--muted-foreground)] focus:outline-none [&:-webkit-autofill]:[-webkit-text-fill-color:var(--foreground)] [&:-webkit-autofill]:caret-[var(--foreground)] [&:-webkit-autofill]:shadow-[0_0_0_100px_var(--surface)_inset]"
             />
           </DensInputGroup>
         </div>
 
         <div className="grid gap-2">
           <div className="flex items-center justify-between">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password" className="text-[var(--foreground)]">Password</Label>
             <a
               href="https://wa.me/6285156540075?text=Halo%20Admin%20Scholarify,%20saya%20lupa%20password%20akun%20TryOut"
               target="_blank"
@@ -119,7 +119,7 @@ export function LoginForm() {
           </div>
           <DensInputGroup
             start={<Lock />}
-            className="h-11 rounded-xl"
+            className="h-11 rounded-xl border-[var(--input)] bg-[var(--surface)]"
             end={
               <button
                 type="button"
@@ -139,16 +139,14 @@ export function LoginForm() {
               placeholder="••••••••"
               autoComplete="current-password"
               required
-              className="w-full bg-transparent text-sm text-[var(--foreground)] placeholder:text-[var(--muted-foreground)] focus:outline-none [&:-webkit-autofill]:shadow-[0_0_0_100px_var(--card)_inset]"
+              className="w-full bg-transparent text-sm text-[var(--foreground)] placeholder:text-[var(--muted-foreground)] focus:outline-none [&:-webkit-autofill]:[-webkit-text-fill-color:var(--foreground)] [&:-webkit-autofill]:caret-[var(--foreground)] [&:-webkit-autofill]:shadow-[0_0_0_100px_var(--surface)_inset]"
             />
           </DensInputGroup>
         </div>
 
-        <div className="flex items-center gap-2.5">
-          <Checkbox id="remember" defaultChecked />
-          <Label htmlFor="remember" className="text-xs font-medium text-[var(--muted-foreground)]">
-            Tetap masuk selama sesi aktif (Better Auth)
-          </Label>
+        <div className="flex items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--surface)]/70 px-3 py-2 text-xs text-[var(--muted-foreground)]">
+          <ShieldCheck className="size-4 shrink-0 text-[var(--primary)]" />
+          <span>Sesi terenkripsi · Progres tryout &amp; target PTN tersimpan otomatis</span>
         </div>
 
         {err && (
@@ -186,7 +184,7 @@ export function LoginForm() {
         variant="outline"
         onClick={onGoogleSignIn}
         disabled={googleLoading}
-        className="h-11 w-full rounded-xl gap-2.5 text-xs font-semibold"
+        className="h-11 w-full rounded-xl gap-2.5 border-[var(--input)] bg-[var(--surface)] text-xs font-semibold text-[var(--foreground)] hover:bg-[var(--muted)]"
       >
         <svg className="size-4" viewBox="0 0 24 24" aria-hidden>
           <path

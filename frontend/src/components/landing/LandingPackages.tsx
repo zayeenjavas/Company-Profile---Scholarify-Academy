@@ -126,7 +126,7 @@ export function LandingPackages({
                         <img
                           src={cover}
                           alt={pkg.title}
-                          className="h-44 w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                          className="h-44 w-full object-cover object-top transition-transform duration-300 group-hover:scale-[1.03]"
                         />
                       </div>
 

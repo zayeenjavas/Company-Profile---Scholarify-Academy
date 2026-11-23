@@ -7,6 +7,13 @@ import type { SanityNews, SanityTestimonial } from "@/src/api/sanity";
 import { Button } from "@/components/ui/button";
 import { RichMathText } from "@/src/components/common/RichMathText";
 
+const NEWS_COVERS = [
+  "/images/program-intensif.jpg",
+  "/images/program-regular.jpg",
+  "/images/program-konsultasi.jpg",
+  "/images/program-tryout.jpg",
+];
+
 export function LandingTestimonialsAndNews({
   isSubscribed,
   testimonials,
@@ -311,7 +318,7 @@ export function LandingTestimonialsAndNews({
           </div>
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-            {visibleNews.map((item) => (
+            {visibleNews.map((item, idx) => (
               <div
                 key={item._id}
                 className="group flex flex-col justify-between rounded-2xl border border-slate-200/80 dark:border-border bg-white dark:bg-card p-3.5 shadow-[0_8px_28px_rgba(15,23,42,0.05)] transition-shadow hover:shadow-[0_14px_34px_rgba(79,107,255,0.12)]"
@@ -319,9 +326,9 @@ export function LandingTestimonialsAndNews({
                 <div>
                   <div className="overflow-hidden rounded-xl bg-slate-100 dark:bg-muted">
                     <img
-                      src={item.gambarUrl || "/images/program-tryout.jpg"}
+                      src={item.gambarUrl || NEWS_COVERS[(safeNewsPage * newsPerPage + idx) % NEWS_COVERS.length]}
                       alt={item.judul}
-                      className="h-44 w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                      className="h-44 w-full object-cover object-center transition-transform duration-300 group-hover:scale-[1.03]"
                     />
                   </div>
 

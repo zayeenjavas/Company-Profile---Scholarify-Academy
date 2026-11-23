@@ -15,7 +15,7 @@ export function LandingAbout() {
           <div className="space-y-4">
             <div className="relative flex h-52 items-end justify-center overflow-hidden rounded-2xl border bg-[#DBEAFE] px-2 pt-3">
               <img
-                src="/images/ig-models/cutout-hijab-beige.png"
+                src="/images/ig-models/about-denim-books.png"
                 alt="Siswa Scholarify"
                 className="max-h-full w-auto object-contain object-bottom"
               />
@@ -32,7 +32,7 @@ export function LandingAbout() {
             </Card>
             <div className="relative flex h-52 items-end justify-center overflow-hidden rounded-2xl border bg-[#FDE68A] px-2 pt-3">
               <img
-                src="/images/ig-models/cutout-male-thinking.png"
+                src="/images/ig-models/about-denim-pointing.png"
                 alt="Persiapan UTBK Scholarify"
                 className="max-h-full w-auto object-contain object-bottom"
               />

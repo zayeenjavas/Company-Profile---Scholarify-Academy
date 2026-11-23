@@ -150,15 +150,15 @@ const PACKAGES_SEED: PackageSeedSpec[] = [
 ];
 
 async function main() {
-  const defaultAdminPassword = await bcrypt.hash("admin123", 10);
+  const defaultAdminPassword = await bcrypt.hash("ScholarifyBarokah!", 10);
   const defaultStudentPassword = await bcrypt.hash("siswa123", 10);
 
   // 1. Seed default Admin & Demo Accounts (Free vs Premium) + 10 Mahasiswa/Siswa Aktif
   await prisma.user.upsert({
-    where: { username: "admin" },
-    update: {},
+    where: { username: "admin_scholarify" },
+    update: { passwordHash: defaultAdminPassword, role: "ADMIN", isActive: true },
     create: {
-      username: "admin",
+      username: "admin_scholarify",
       name: "Admin Scholarify",
       email: "admin@scholarify.id",
       passwordHash: defaultAdminPassword,

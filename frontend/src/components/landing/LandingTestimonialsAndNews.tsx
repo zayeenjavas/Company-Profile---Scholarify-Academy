@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Calendar, Send, Star } from "lucide-react";
+import { ArrowDown, ArrowUp, Calendar, GraduationCap, Send, Star } from "lucide-react";
 import type { SanityNews, SanityTestimonial } from "@/src/api/sanity";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -57,78 +57,158 @@ export function LandingTestimonialsAndNews({
         </section>
       )}
 
-      {/* Testimoni Section (Lavender Tint) */}
-      <section id="testimoni" className="bg-[#EBEFFE] dark:bg-muted/30 py-14 sm:py-16">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-12">
-            <div className="space-y-4 lg:col-span-4">
-              <Badge variant="outline" className="border-[#2B44FF]/30 text-[#2B44FF] dark:text-primary">
-                Testimoni Peserta
-              </Badge>
-              <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
-                Cerita Sukses Dari{" "}
-                <span className="text-[#2B44FF]">Alumni Scholarify</span>
-              </h2>
-              <div className="flex items-center gap-2 pt-2">
-                <Button
+      {/* Testimoni Section (Lavender Editorial Layout ala Referensi) */}
+      <section
+        id="testimoni"
+        className="relative overflow-hidden bg-[#E9ECFF] dark:bg-muted/30 py-16 sm:py-20"
+      >
+        {/* Subtle Giant Watermark Quote */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none select-none absolute left-1/2 top-4 -translate-x-1/4 text-[220px] sm:text-[300px] font-serif leading-none text-[#4F6BFF]/[0.06] dark:text-white/[0.04]"
+        >
+          &rdquo;
+        </div>
+
+        <div className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6 space-y-10">
+          {/* Top-Left Editorial Header */}
+          <div className="space-y-1.5">
+            <div className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-widest text-slate-600 dark:text-muted-foreground">
+              <span className="inline-flex h-2.5 w-2.5 rounded-full bg-[#4F6BFF]" />
+              TESTIMONI
+            </div>
+            <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-foreground sm:text-4xl leading-[1.15]">
+              Cerita Sukses
+              <span className="block">
+                dari{" "}
+                <span className="relative inline-block">
+                  <em
+                    className="italic font-normal text-[#4F6BFF]"
+                    style={{ fontFamily: "'Instrument Serif', Georgia, serif" }}
+                  >
+                    Alumni Scholarify
+                  </em>
+                  <svg
+                    viewBox="0 0 180 12"
+                    fill="none"
+                    className="pointer-events-none absolute -bottom-1 left-0 w-full h-2.5 text-[#FF6B4A]"
+                    preserveAspectRatio="none"
+                  >
+                    <path
+                      d="M2 9.5C55 2.5 125 2.5 178 9.5"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </span>
+              </span>
+            </h2>
+          </div>
+
+          {/* 3-Column Open Testimonial Showcase */}
+          {current && (
+            <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-12">
+              {/* Left: Circular Avatar with Orbital Ring & Badge */}
+              <div className="flex justify-center md:col-span-4">
+                <div className="relative flex h-44 w-44 sm:h-52 sm:w-52 items-center justify-center rounded-full border border-[#4F6BFF]/25 p-3">
+                  {/* Small Graduation Cap Badge (top-left) */}
+                  <div className="absolute left-2 top-5 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-[#5B6CFF] text-white shadow-md">
+                    <GraduationCap className="size-4" />
+                  </div>
+                  {/* Tiny Coral Dot (bottom-left) */}
+                  <span className="absolute bottom-6 left-4 h-2.5 w-2.5 rounded-full bg-[#FF6B4A]" />
+                  {/* Tiny Ring Dot (right) */}
+                  <span className="absolute right-0 top-1/2 h-2.5 w-2.5 -translate-y-1/2 translate-x-1/2 rounded-full border-2 border-[#4F6BFF]/40 bg-[#E9ECFF] dark:bg-background" />
+
+                  <div className="h-full w-full overflow-hidden rounded-full bg-white p-1.5 shadow-md">
+                    {current.fotoUrl ? (
+                      <img
+                        src={current.fotoUrl}
+                        alt={current.nama}
+                        className="h-full w-full rounded-full object-cover object-top"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center rounded-full bg-[#4F6BFF]/10 text-3xl font-bold text-[#4F6BFF]">
+                        {current.nama.slice(0, 2).toUpperCase()}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Center: Name, Campus, Quote & Rating Pill */}
+              <div className="space-y-4 text-center md:col-span-7 md:text-left">
+                <div>
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-foreground">
+                    {current.nama}
+                  </h3>
+                  <p className="text-xs font-medium text-slate-500 dark:text-muted-foreground">
+                    {current.asalKampus}
+                  </p>
+                </div>
+
+                <p className="text-sm italic leading-relaxed text-slate-700 dark:text-foreground/90 sm:text-base">
+                  &ldquo;{current.isi}&rdquo;
+                </p>
+
+                <div className="flex flex-wrap items-center justify-center gap-2 md:justify-start">
+                  <div className="inline-flex items-center gap-1 rounded-full bg-white dark:bg-card px-3.5 py-1.5 shadow-sm">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`size-3.5 ${
+                          i < (current.rating || 5)
+                            ? "fill-amber-400 text-amber-400"
+                            : "fill-slate-200 text-slate-200 dark:fill-slate-700 dark:text-slate-700"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Right: Vertical Controls & Coral Indicator Dots */}
+              <div className="flex flex-row items-center justify-center gap-3 md:col-span-1 md:flex-col">
+                <button
                   type="button"
-                  size="icon"
-                  variant="outline"
                   onClick={prev}
                   aria-label="Testimoni sebelumnya"
-                  className="rounded-full"
+                  className="flex h-9 w-9 items-center justify-center rounded-full bg-white dark:bg-card text-slate-700 dark:text-foreground shadow-sm transition hover:bg-[#4F6BFF] hover:text-white"
                 >
-                  <ArrowLeft className="size-4" />
-                </Button>
-                <Button
+                  <ArrowUp className="size-4 -rotate-90 md:rotate-0" />
+                </button>
+
+                <div className="flex flex-row items-center gap-2 md:flex-col">
+                  {testimonials.slice(0, 5).map((item, idx) => {
+                    const active = idx === tIdx % Math.min(5, Math.max(1, testimonials.length));
+                    return (
+                      <button
+                        key={item._id}
+                        type="button"
+                        onClick={() => setTIdx(idx)}
+                        aria-label={`Testimoni ${idx + 1}`}
+                        className={`h-2.5 w-2.5 rounded-full transition-all ${
+                          active
+                            ? "scale-110 bg-[#FF6B4A]"
+                            : "bg-white/90 dark:bg-card hover:bg-[#4F6BFF]/40"
+                        }`}
+                      />
+                    );
+                  })}
+                </div>
+
+                <button
                   type="button"
-                  size="icon"
-                  variant="outline"
                   onClick={next}
                   aria-label="Testimoni berikutnya"
-                  className="rounded-full"
+                  className="flex h-9 w-9 items-center justify-center rounded-full bg-white dark:bg-card text-slate-700 dark:text-foreground shadow-sm transition hover:bg-[#4F6BFF] hover:text-white"
                 >
-                  <ArrowRight className="size-4" />
-                </Button>
+                  <ArrowDown className="size-4 -rotate-90 md:rotate-0" />
+                </button>
               </div>
             </div>
-
-            <div className="lg:col-span-8">
-              {current && (
-                <Card className="p-6 sm:p-8">
-                  <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
-                    <div className="h-20 w-20 shrink-0 overflow-hidden rounded-full border bg-[#2B44FF]/10 flex items-center justify-center">
-                      {current.fotoUrl ? (
-                        <img
-                          src={current.fotoUrl}
-                          alt={current.nama}
-                          className="h-full w-full object-cover"
-                        />
-                      ) : (
-                        <span className="text-lg font-bold text-[#2B44FF]">
-                          {current.nama.slice(0, 2).toUpperCase()}
-                        </span>
-                      )}
-                    </div>
-                    <div className="space-y-3">
-                      <div className="flex items-center gap-1 text-amber-500">
-                        {Array.from({ length: current.rating || 5 }).map((_, i) => (
-                          <Star key={i} className="size-4 fill-current" />
-                        ))}
-                      </div>
-                      <p className="text-sm leading-relaxed text-foreground sm:text-base">
-                        &ldquo;{current.isi}&rdquo;
-                      </p>
-                      <div>
-                        <p className="text-sm font-bold">{current.nama}</p>
-                        <p className="text-xs text-muted-foreground">{current.asalKampus}</p>
-                      </div>
-                    </div>
-                  </div>
-                </Card>
-              )}
-            </div>
-          </div>
+          )}
         </div>
       </section>
 

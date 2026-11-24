@@ -177,9 +177,16 @@ export default function AdminDashboard({ user }: AdminDashboardProps) {
                 <DensSidebarRailItem
                   label="Scholarify Overview"
                   onClick={() => handleTabChange("overview")}
-                  className="bg-brand text-brand-foreground hover:bg-[var(--brand)]/90 hover:text-[var(--brand-foreground)]"
+                  className="bg-white text-slate-900 shadow-xs ring-1 ring-black/10 hover:bg-white/95 hover:text-slate-900"
                 >
-                  <span className="text-[15px] font-bold">S</span>
+                  <Image
+                    src="/images/scholarify-logo.svg"
+                    alt="Scholarify"
+                    width={22}
+                    height={22}
+                    className="object-contain"
+                    priority
+                  />
                 </DensSidebarRailItem>
                 {tabs.map((tab) => {
                   const Icon = tab.icon;
@@ -216,12 +223,12 @@ export default function AdminDashboard({ user }: AdminDashboardProps) {
             {/* Structured Sidebar (LG+) */}
             <DensSidebar className="hidden lg:flex">
               <DensSidebarHeader>
-                <div className="grid size-9 shrink-0 place-content-center overflow-hidden rounded-xl bg-[var(--foreground)] text-[var(--background)]">
+                <div className="grid size-9 shrink-0 place-content-center overflow-hidden rounded-xl bg-white shadow-xs ring-1 ring-slate-200/80 dark:ring-white/15">
                   <Image
-                    src="/images/scholarify-logo.png"
+                    src="/images/scholarify-logo.svg"
                     alt="Scholarify Logo"
-                    width={32}
-                    height={32}
+                    width={26}
+                    height={26}
                     className="object-contain"
                     priority
                   />

@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <!-- Clean rounded white/cream badge background is optional; transparent mark for flexible placement -->
+  <!-- Orange lightbulb arc -->
+  <path
+    d="M174 334C135 304 110 256 110 202C110 118 175 52 256 52C337 52 402 118 402 202C402 256 377 304 338 334"
+    stroke="#E88D56"
+    stroke-width="26"
+    stroke-linecap="round"
+  />
+  <!-- Lightbulb base bars -->
+  <path d="M192 372H320" stroke="#E88D56" stroke-width="22" stroke-linecap="round" />
+  <path d="M210 412H302" stroke="#E88D56" stroke-width="22" stroke-linecap="round" />
+  <path d="M232 450H280" stroke="#E88D56" stroke-width="20" stroke-linecap="round" />
+
+  <!-- Subtle arc dots above graduation cap -->
+  <circle cx="194" cy="146" r="7" fill="#2A446E" />
+  <circle cx="222" cy="126" r="7" fill="#2A446E" />
+  <circle cx="256" cy="118" r="7" fill="#2A446E" />
+  <circle cx="290" cy="126" r="7" fill="#2A446E" />
+  <circle cx="318" cy="146" r="7" fill="#2A446E" />
+
+  <!-- Graduation cap -->
+  <path d="M256 150L348 188L256 226L164 188L256 150Z" fill="#243E68" />
+  <path
+    d="M202 208V242C202 254 226 266 256 266C286 266 310 254 310 242V208L256 230L202 208Z"
+    fill="#1B3258"
+  />
+  <!-- Tassel -->
+  <path d="M336 194V240" stroke="#E88D56" stroke-width="9" stroke-linecap="round" />
+  <circle cx="336" cy="244" r="8" fill="#E88D56" />
+
+  <!-- Open book -->
+  <path
+    d="M170 264C198 258 228 266 252 282V334C228 318 198 310 170 316V264Z"
+    fill="#243E68"
+  />
+  <path
+    d="M342 264C314 258 284 266 260 282V334C284 318 314 310 342 316V264Z"
+    fill="#315285"
+  />
+</svg>

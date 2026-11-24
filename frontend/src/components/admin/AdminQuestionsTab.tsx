@@ -275,7 +275,11 @@ export function AdminQuestionsTab() {
                   disabled={Boolean(editingId)}
                 >
                   <SelectTrigger className="w-full h-10">
-                    <SelectValue placeholder="Pilih Paket" />
+                    <SelectValue placeholder="Pilih Paket">
+                      {(val: string | null) =>
+                        packages.find((p) => p.id === val)?.title ?? "Pilih Paket"
+                      }
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent>
                     {packages.map((p) => (
@@ -294,7 +298,12 @@ export function AdminQuestionsTab() {
                   disabled={Boolean(editingId)}
                 >
                   <SelectTrigger className="w-full h-10">
-                    <SelectValue placeholder="Pilih Subtest" />
+                    <SelectValue placeholder="Pilih Subtest">
+                      {(val: string | null) => {
+                        const s = subtests.find((item) => item.id === val);
+                        return s ? `${s.code} — ${s.title}` : "Pilih Subtest";
+                      }}
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent>
                     {subtests.map((s) => (
@@ -421,7 +430,13 @@ export function AdminQuestionsTab() {
           onValueChange={(v) => setFilterPkg(v === "ALL" || !v ? "" : v)}
         >
           <SelectTrigger className="w-[200px] h-10">
-            <SelectValue placeholder="Semua Paket" />
+            <SelectValue placeholder="Semua Paket">
+              {(val: string | null) =>
+                val === "ALL" || !val
+                  ? "Semua Paket"
+                  : (packages.find((p) => p.id === val)?.title ?? "Semua Paket")
+              }
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="ALL">Semua Paket</SelectItem>
@@ -437,7 +452,13 @@ export function AdminQuestionsTab() {
           onValueChange={(v) => setFilterSubtest(v === "ALL" || !v ? "" : v)}
         >
           <SelectTrigger className="w-[160px] h-10">
-            <SelectValue placeholder="Semua Subtest" />
+            <SelectValue placeholder="Semua Subtest">
+              {(val: string | null) =>
+                val === "ALL" || !val
+                  ? "Semua Subtest"
+                  : (subtests.find((s) => s.code === val)?.code ?? val)
+              }
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="ALL">Semua Subtest</SelectItem>
@@ -483,7 +504,12 @@ export function AdminQuestionsTab() {
               onValueChange={(val) => val && setBulkTargetPkg(val)}
             >
               <SelectTrigger className="h-8 w-44 text-xs">
-                <SelectValue placeholder="Pilih paket tujuan..." />
+                <SelectValue placeholder="Pilih paket tujuan...">
+                  {(val: string | null) => {
+                    const p = packages.find((item) => item.id === val);
+                    return p ? `${p.slug} — ${p.title}` : "Pilih paket tujuan...";
+                  }}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {packages.map((p) => (

@@ -177,13 +177,13 @@ export default function AdminDashboard({ user }: AdminDashboardProps) {
                 <DensSidebarRailItem
                   label="Scholarify Overview"
                   onClick={() => handleTabChange("overview")}
-                  className="bg-white text-slate-900 shadow-xs ring-1 ring-black/10 hover:bg-white/95 hover:text-slate-900"
+                  className="bg-[#FCF8F2] text-slate-900 shadow-xs ring-1 ring-black/10 hover:bg-[#FCF8F2]/95 hover:text-slate-900"
                 >
                   <Image
-                    src="/images/scholarify-logo.svg"
+                    src="/images/scholarify-logo.png"
                     alt="Scholarify"
-                    width={22}
-                    height={22}
+                    width={26}
+                    height={26}
                     className="object-contain"
                     priority
                   />
@@ -223,12 +223,12 @@ export default function AdminDashboard({ user }: AdminDashboardProps) {
             {/* Structured Sidebar (LG+) */}
             <DensSidebar className="hidden lg:flex">
               <DensSidebarHeader>
-                <div className="grid size-9 shrink-0 place-content-center overflow-hidden rounded-xl bg-white shadow-xs ring-1 ring-slate-200/80 dark:ring-white/15">
+                <div className="grid size-9 shrink-0 place-content-center overflow-hidden rounded-xl bg-[#FCF8F2] shadow-xs ring-1 ring-slate-200/80 dark:ring-white/15">
                   <Image
-                    src="/images/scholarify-logo.svg"
+                    src="/images/scholarify-logo.png"
                     alt="Scholarify Logo"
-                    width={26}
-                    height={26}
+                    width={30}
+                    height={30}
                     className="object-contain"
                     priority
                   />

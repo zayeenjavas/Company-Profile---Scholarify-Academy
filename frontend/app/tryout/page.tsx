@@ -174,23 +174,23 @@ export default function TryoutPortalPage() {
             </div>
           </div>
 
-          <div className="flex flex-wrap items-end justify-between gap-4">
+          <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between">
             <div className="space-y-1.5">
               <SectionEyebrow label="DAFTAR PAKET" />
               <EditorialHeading line1="Paket Simulasi" highlight="Tersedia" />
             </div>
 
-            <div className="flex flex-wrap items-center gap-2">
-              <div className="relative">
+            <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center w-full sm:w-auto">
+              <div className="relative w-full sm:w-56">
                 <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                 <Input
                   placeholder="Cari paket tryout..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="h-10 w-52 rounded-full bg-white dark:bg-card pl-9 text-xs"
+                  className="h-10 w-full rounded-full bg-white dark:bg-card pl-9 text-xs"
                 />
               </div>
-              <div className="inline-flex rounded-full border bg-white dark:bg-card p-1 text-xs">
+              <div className="grid grid-cols-3 sm:inline-flex rounded-full border bg-white dark:bg-card p-1 text-xs w-full sm:w-auto">
                 {[
                   { id: "ALL", label: "Semua" },
                   { id: "FREE", label: "Gratis" },
@@ -200,7 +200,7 @@ export default function TryoutPortalPage() {
                     key={t.id}
                     type="button"
                     onClick={() => setTierFilter(t.id as "ALL" | "FREE" | "PREMIUM")}
-                    className={`rounded-full px-3.5 py-1.5 font-medium transition-colors ${
+                    className={`rounded-full px-3.5 py-1.5 font-medium transition-colors text-center ${
                       tierFilter === t.id
                         ? "bg-[#5B6CFF] text-white"
                         : "text-muted-foreground hover:text-foreground"
@@ -356,17 +356,17 @@ export default function TryoutPortalPage() {
                     </p>
                   )}
                 </div>
-                <form onSubmit={handleRedeemVoucher} className="flex items-center gap-2 shrink-0">
+                <form onSubmit={handleRedeemVoucher} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 shrink-0 w-full sm:w-auto">
                   <Input
                     value={voucherCode}
                     onChange={(e) => setVoucherCode(e.target.value.toUpperCase())}
                     placeholder="KODE VOUCHER"
-                    className="h-10 w-44 rounded-full font-mono text-xs uppercase"
+                    className="h-10 w-full sm:w-44 rounded-full font-mono text-xs uppercase"
                   />
                   <Button
                     type="submit"
                     disabled={redeeming || !voucherCode.trim()}
-                    className="h-10 rounded-full bg-[#2B44FF] hover:bg-[#1E34C8] text-white px-5 text-xs font-semibold"
+                    className="h-10 w-full sm:w-auto rounded-full bg-[#2B44FF] hover:bg-[#1E34C8] text-white px-5 text-xs font-semibold"
                   >
                     {redeeming ? "Memproses..." : "Tukarkan"}
                   </Button>
@@ -385,7 +385,56 @@ export default function TryoutPortalPage() {
             <EditorialHeading line1="Riwayat Nilai" highlight="TryOut Kamu" />
           </div>
 
-          <Card className="rounded-2xl border-slate-200/80 dark:border-border shadow-sm overflow-hidden">
+          {/* Mobile Card List Riwayat */}
+          <div className="space-y-3 md:hidden">
+            {results.length === 0 ? (
+              <Card className="rounded-2xl border-slate-200/80 dark:border-border shadow-sm">
+                <CardContent className="py-10 text-center text-sm text-muted-foreground">
+                  {user
+                    ? "Belum ada sesi TryOut yang dinilai. Mulai kerjakan paket di atas!"
+                    : "Masuk dengan akunmu untuk melihat riwayat skor dan pembahasan."}
+                </CardContent>
+              </Card>
+            ) : (
+              results.map((r) => (
+                <Card key={r.sessionId} className="rounded-2xl border-slate-200/80 dark:border-border shadow-sm">
+                  <CardContent className="p-4 space-y-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="min-w-0">
+                        <p className="font-semibold text-sm leading-snug">{r.packageTitle}</p>
+                        <p className="mt-1 text-xs text-muted-foreground tabular-nums">
+                          {r.correctCount} benar · {r.wrongCount} salah · {r.emptyCount} kosong
+                        </p>
+                      </div>
+                      <Badge variant="secondary" className="shrink-0">{r.subtestCode}</Badge>
+                    </div>
+                    <div className="flex items-center justify-between border-t pt-3">
+                      <div className="tabular-nums">
+                        <span className="text-lg font-extrabold text-[#5B6CFF]">
+                          {Math.round(r.totalScore * 10)}
+                        </span>
+                        <span className="ml-1.5 text-xs text-muted-foreground">
+                          ({Math.round(r.totalScore)}%)
+                        </span>
+                      </div>
+                      <Link href={`/tryout/review/${r.sessionId}`}>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-9 rounded-full gap-1.5 text-xs"
+                        >
+                          <FileText className="size-3.5" />
+                          Pembahasan
+                        </Button>
+                      </Link>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))
+            )}
+          </div>
+
+          <Card className="hidden md:block rounded-2xl border-slate-200/80 dark:border-border shadow-sm overflow-hidden">
             <CardContent className="p-0 overflow-x-auto">
               <Table>
                 <TableHeader>
